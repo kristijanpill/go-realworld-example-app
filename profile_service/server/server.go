@@ -1,12 +1,15 @@
 package server
 
 import (
+	"crypto/rsa"
 	"fmt"
 	"log"
 	"net"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/kristijanpill/go-realworld-example-app/common/db"
+	"github.com/kristijanpill/go-realworld-example-app/common/interceptor"
 	"github.com/kristijanpill/go-realworld-example-app/common/proto/pb"
 	"github.com/kristijanpill/go-realworld-example-app/profile_service/config"
 	"github.com/kristijanpill/go-realworld-example-app/profile_service/handler"
@@ -36,12 +39,15 @@ func (server *Server) Start() {
 	profileService := service.NewProfileService(profileStore)
 	profileHandler := handler.NewProfileHandler(profileService)
 
+	publicKey := server.initPublicKey()
+	authInterceptor := interceptor.NewAuthInterceptor("Token", server.config.RestrictedPaths, publicKey)
+
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", server.config.Port))
 	if err != nil {
 		log.Fatal("failed to listen: ", err)
 	}
 
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(authInterceptor.Unary()))
 	pb.RegisterProfileServiceServer(grpcServer, profileHandler)
 
 	if err := grpcServer.Serve(listener); err != nil {
@@ -65,4 +71,13 @@ func (server *Server) initProfilePostgresStore(db *gorm.DB) *store.ProfilePostgr
 	}
 
 	return profileStore
+}
+
+func (server *Server) initPublicKey() *rsa.PublicKey {
+	publicKey, err := jwt.ParseRSAPublicKeyFromPEM([]byte(server.config.PublicKey))
+	if err != nil {
+		log.Fatal("cannot parse public key: ", err)
+	}
+
+	return publicKey
 }

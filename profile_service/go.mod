@@ -5,6 +5,7 @@ go 1.18
 replace github.com/kristijanpill/go-realworld-example-app/common => ../common
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/google/uuid v1.1.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.2
 	github.com/kristijanpill/go-realworld-example-app/common v0.0.0-00010101000000-000000000000
