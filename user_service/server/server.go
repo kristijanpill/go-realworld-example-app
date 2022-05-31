@@ -1,11 +1,14 @@
 package server
 
 import (
+	"crypto/rsa"
 	"fmt"
 	"log"
 	"net"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/kristijanpill/go-realworld-example-app/common/interceptor"
 	"github.com/kristijanpill/go-realworld-example-app/common/proto/pb"
 	"github.com/kristijanpill/go-realworld-example-app/user_service/config"
 	"github.com/kristijanpill/go-realworld-example-app/user_service/handler"
@@ -30,17 +33,19 @@ func NewServer(config *config.Config) *Server {
 
 func (server *Server) Start() {
 	userStore := server.initUserStore()
-	jwtManager := server.initJWTManager()
+	privateKey, publicKey := server.initKeyPair()
+	jwtManager := service.NewJWTManager(privateKey, publicKey)
 	profileServiceClient := server.initProfileServiceClient()
 	userService := service.NewUserService(userStore, jwtManager, profileServiceClient)
 	userHandler := handler.NewUserHandler(userService)
+	authInterceptor := interceptor.NewAuthInterceptor(server.config.RestrictedPaths, publicKey)
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", server.config.Port))
 	if err != nil {
 		log.Fatal("failed to listen: ", err)
 	}
 
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(authInterceptor.Unary()))
 	pb.RegisterUserServiceServer(grpcServer, userHandler)
 
 	if err := grpcServer.Serve(listener); err != nil {
@@ -57,15 +62,6 @@ func (server *Server) initUserStore() store.UserStore {
 	return userStore
 }
 
-func (server *Server) initJWTManager() *service.JWTManager {
-	jwtManager, err := service.NewJWTManager(server.config.PrivateKey, server.config.PublicKey)
-	if err != nil {
-		log.Fatal("cannot create jwt manager: ", err)
-	}
-
-	return jwtManager
-}
-
 func (server *Server) initProfileServiceClient() pb.ProfileServiceClient {
 	address := fmt.Sprintf("%s:%s", server.config.ProfileServiceHost, server.config.ProfileServicePort)
 	profileServiceClient, err := service.NewProfileServiceClient(address)
@@ -74,4 +70,18 @@ func (server *Server) initProfileServiceClient() pb.ProfileServiceClient {
 	}
 
 	return profileServiceClient
+}
+
+func (server *Server) initKeyPair() (*rsa.PrivateKey, *rsa.PublicKey) {
+	privateKey, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(server.config.PrivateKey))
+	if err != nil {
+		log.Fatal("cannot parse private key: ", err)
+	}
+
+	publicKey, err := jwt.ParseRSAPublicKeyFromPEM([]byte(server.config.PublicKey))
+	if err != nil {
+		log.Fatal("cannot parse public key: ", err)
+	}
+
+	return privateKey, publicKey
 }

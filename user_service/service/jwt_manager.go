@@ -14,21 +14,12 @@ type JWTManager struct {
 	accessTokenDuration time.Duration
 }
 
-func NewJWTManager(privateKey, publicKey string) (*JWTManager, error) {
-	parsedPrivateKey, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(privateKey))
-	if err != nil {
-		return nil, err
-	}
-	parsedPublicKey, err := jwt.ParseRSAPublicKeyFromPEM([]byte(publicKey))
-	if err != nil {
-		return nil, err
-	}
-
+func NewJWTManager(privateKey *rsa.PrivateKey, publicKey *rsa.PublicKey) *JWTManager {
 	return &JWTManager{
-		privateKey:          parsedPrivateKey,
-		publicKey:           parsedPublicKey,
+		privateKey:          privateKey,
+		publicKey:           publicKey,
 		accessTokenDuration: 15 * time.Minute,
-	}, nil
+	}
 }
 
 func (manager *JWTManager) GenerateAccessToken(user *model.User) (string, error) {

@@ -13,6 +13,7 @@ type Config struct {
 	UserDatabaseName     string
 	PrivateKey           string
 	PublicKey            string
+	RestrictedPaths      map[string]bool
 }
 
 func NewConfig() *Config {
@@ -27,5 +28,15 @@ func NewConfig() *Config {
 		UserDatabaseUser:     os.Getenv("USER_DATABASE_USER"),
 		UserDatabasePassword: os.Getenv("USER_DATABASE_PASSWORD"),
 		UserDatabaseName:     os.Getenv("USER_DATABASE_Name"),
+		RestrictedPaths:      restrictedPaths(),
+	}
+}
+
+func restrictedPaths() map[string]bool {
+	const userService = "/user.UserService/"
+
+	return map[string]bool{
+		userService + "GetCurrentUser":    true,
+		userService + "UpdateCurrentUser": true,
 	}
 }
