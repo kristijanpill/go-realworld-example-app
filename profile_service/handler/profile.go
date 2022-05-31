@@ -9,23 +9,29 @@ import (
 
 type ProfileHandler struct {
 	pb.UnimplementedProfileServiceServer
-	service *service.ProfileService
+	profileService *service.ProfileService
+	followService *service.FollowService
 }
 
-func NewProfileHandler(service *service.ProfileService) *ProfileHandler {
+func NewProfileHandler(profileService *service.ProfileService, followService *service.FollowService) *ProfileHandler {
 	return &ProfileHandler{
-		service: service,
+		profileService: profileService,
+		followService: followService,
 	}
 }
 
 func(handler *ProfileHandler) CreateProfile(ctx context.Context, request *pb.CreateProfileRequest) (*pb.ProfileInfo, error) {
-	return handler.service.CreateProfile(request)
+	return handler.profileService.CreateProfile(request)
 }
 
 func (handler *ProfileHandler) GetProfileById(ctx context.Context, request *pb.ProfileIdRequest) (*pb.ProfileInfo, error) {
-	return handler.service.FindById(request)
+	return handler.profileService.FindById(request)
 }
 
 func (handler *ProfileHandler) UpdateProfile(ctx context.Context, request *pb.UpdateProfileRequest) (*pb.ProfileInfo, error) {
-	return handler.service.UpdateProfile(request)
+	return handler.profileService.UpdateProfile(request)
+}
+
+func (handler *ProfileHandler) FollowUserByUsername(ctx context.Context, request *pb.FollowRequest) (*pb.ProfileResponse, error) {
+	return handler.followService.FollowUserByUsername(ctx, request)
 }

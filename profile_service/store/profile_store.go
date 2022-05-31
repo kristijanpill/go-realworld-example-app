@@ -7,5 +7,6 @@ import (
 type ProfileStore interface {
 	Create(*model.Profile) (*model.Profile, error)
 	FindById(id string) (*model.Profile, error)
+	FindByUsername(username string) (*model.Profile, error)
 	Update(*model.Profile) (*model.Profile, error)
 }
