@@ -35,3 +35,7 @@ func (handler *ProfileHandler) UpdateProfile(ctx context.Context, request *pb.Up
 func (handler *ProfileHandler) FollowUserByUsername(ctx context.Context, request *pb.FollowRequest) (*pb.ProfileResponse, error) {
 	return handler.followService.FollowUserByUsername(ctx, request)
 }
+
+func (handler *ProfileHandler) UnfollowUserByUsername(ctx context.Context, request *pb.UnfollowRequest) (*pb.ProfileResponse, error) {
+	return handler.followService.UnfollowUserByUsername(ctx, request)
+}

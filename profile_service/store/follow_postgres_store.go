@@ -26,8 +26,8 @@ func (store *FollowPostgresStore) Create(follow *model.Follow) (*model.Follow, e
 	return follow, result.Error
 }
 
-func (store *FollowPostgresStore) Delete(follow *model.Follow) error {
-	result := store.db.Delete(follow)
+func (store *FollowPostgresStore) DeleteByProfileIdAndTargetId(profileId, targetId string) error {
+	result := store.db.Where("profile_id = ? AND target_id = ?", profileId, targetId).Delete(&model.Follow{})
 
 	return result.Error
 }
