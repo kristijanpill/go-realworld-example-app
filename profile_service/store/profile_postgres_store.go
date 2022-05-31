@@ -1,7 +1,6 @@
 package store
 
 import (
-	"github.com/google/uuid"
 	"github.com/kristijanpill/go-realworld-example-app/profile_service/model"
 	"gorm.io/gorm"
 )
@@ -27,9 +26,9 @@ func (store *ProfilePostgresStore) Create(profile *model.Profile) (*model.Profil
 	return profile, result.Error
 }
 
-func (store *ProfilePostgresStore) FindById(id uuid.UUID) (*model.Profile, error) {
+func (store *ProfilePostgresStore) FindById(id string) (*model.Profile, error) {
 	var profile model.Profile
-	result := store.db.Where("id = ?", id.String()).First(&profile)
+	result := store.db.Where("id = ?", id).First(&profile)
 
 	return &profile, result.Error
 }

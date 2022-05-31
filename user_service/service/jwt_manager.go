@@ -24,7 +24,7 @@ func NewJWTManager(privateKey *rsa.PrivateKey, publicKey *rsa.PublicKey) *JWTMan
 
 func (manager *JWTManager) GenerateAccessToken(user *model.User) (string, error) {
 	claims := jwt.StandardClaims{
-			Subject:   user.Email,
+			Subject:   user.ID.String(),
 			ExpiresAt: time.Now().Add(manager.accessTokenDuration).Unix(),
 	}
 

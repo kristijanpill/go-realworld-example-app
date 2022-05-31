@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/google/uuid"
 	"github.com/kristijanpill/go-realworld-example-app/common/proto/pb"
 	"github.com/kristijanpill/go-realworld-example-app/profile_service/model"
 	"github.com/kristijanpill/go-realworld-example-app/profile_service/store"
@@ -36,12 +35,7 @@ func (service *ProfileService) CreateProfile(request *pb.CreateProfileRequest) (
 }
 
 func (service *ProfileService) FindById(request *pb.ProfileIdRequest) (*pb.ProfileInfo, error) {
-	id, err := uuid.Parse(request.Id)
-	if err != nil {
-		return nil, err
-	}
-
-	profile, err := service.store.FindById(id)
+	profile, err := service.store.FindById(request.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -54,12 +48,7 @@ func (service *ProfileService) FindById(request *pb.ProfileIdRequest) (*pb.Profi
 }
 
 func (service *ProfileService) UpdateProfile(request *pb.UpdateProfileRequest) (*pb.ProfileInfo, error) {
-	id, err := uuid.Parse(request.Id)
-	if err != nil {
-		return nil, err
-	}
-
-	profile, err := service.store.FindById(id)
+	profile, err := service.store.FindById(request.Id)
 	if err != nil {
 		return nil, err
 	}

@@ -89,8 +89,9 @@ func (service *UserService) Login(request *pb.LoginUserRequest) (*pb.UserRespons
 }
 
 func (service *UserService) GetCurrentUser(ctx context.Context) (*pb.UserResponse, error) {
-	email := ctx.Value(interceptor.CurrentUserKey{}).(string)
-	user, err := service.store.FindByEmail(email)
+	id := ctx.Value(interceptor.CurrentUserKey{}).(string)
+	
+	user, err := service.store.FindById(id)
 	if err != nil {
 		return nil, err
 	}
@@ -112,8 +113,8 @@ func (service *UserService) GetCurrentUser(ctx context.Context) (*pb.UserRespons
 }
 
 func (service *UserService) UpdateCurrentUser(ctx context.Context, request *pb.UpdateUserRequest) (*pb.UserResponse, error) {
-	email := ctx.Value(interceptor.CurrentUserKey{}).(string)
-	user, err := service.store.FindByEmail(email)
+	id := ctx.Value(interceptor.CurrentUserKey{}).(string)
+	user, err := service.store.FindById(id)
 	if err != nil {
 		return nil, err
 	}

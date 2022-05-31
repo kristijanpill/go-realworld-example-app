@@ -33,6 +33,13 @@ func (store *UserPostgresStore) FindByEmail(email string) (*model.User, error) {
 	return &user, result.Error
 }
 
+func (store *UserPostgresStore) FindById(id string) (*model.User, error) {
+	var user model.User
+	result := store.db.Where("id = ?", id).First(&user)
+
+	return &user, result.Error
+}
+
 func (store *UserPostgresStore) Update(user *model.User) (*model.User, error) {
 	result := store.db.Save(user)
 
