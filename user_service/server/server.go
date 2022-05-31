@@ -8,6 +8,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/kristijanpill/go-realworld-example-app/common/db"
 	"github.com/kristijanpill/go-realworld-example-app/common/interceptor"
 	"github.com/kristijanpill/go-realworld-example-app/common/proto/pb"
 	"github.com/kristijanpill/go-realworld-example-app/user_service/config"
@@ -15,6 +16,7 @@ import (
 	"github.com/kristijanpill/go-realworld-example-app/user_service/service"
 	"github.com/kristijanpill/go-realworld-example-app/user_service/store"
 	"google.golang.org/grpc"
+	"gorm.io/gorm"
 )
 
 type Server struct {
@@ -32,7 +34,8 @@ func NewServer(config *config.Config) *Server {
 }
 
 func (server *Server) Start() {
-	userStore := server.initUserStore()
+	db := server.initDbConnection()
+	userStore := server.initUserStore(db)
 	privateKey, publicKey := server.initKeyPair()
 	jwtManager := service.NewJWTManager(privateKey, publicKey)
 	profileServiceClient := server.initProfileServiceClient()
@@ -53,10 +56,19 @@ func (server *Server) Start() {
 	}
 }
 
-func (server *Server) initUserStore() store.UserStore {
-	userStore, err := store.NewUserPostgresStore(server.config.UserDatabaseHost, server.config.UserDatabasePort, server.config.UserDatabaseName, server.config.UserDatabaseUser, server.config.UserDatabasePassword)
+func (server *Server) initDbConnection() *gorm.DB {
+	db, err := db.NewPostgresConnection(server.config.UserDatabaseHost, server.config.UserDatabasePort, server.config.UserDatabaseName, server.config.UserDatabaseUser, server.config.UserDatabasePassword)
 	if err != nil {
-		log.Fatal("cannot connect to database: ", err)
+		log.Fatal("failed to connect to database: ", err)
+	}
+
+	return db
+}
+
+func (server *Server) initUserStore(db *gorm.DB) store.UserStore {
+	userStore, err := store.NewUserPostgresStore(db)
+	if err != nil {
+		log.Fatal("failed to init user store: ", err)
 	}
 
 	return userStore

@@ -2,7 +2,6 @@ package store
 
 import (
 	"github.com/google/uuid"
-	"github.com/kristijanpill/go-realworld-example-app/common/db"
 	"github.com/kristijanpill/go-realworld-example-app/profile_service/model"
 	"gorm.io/gorm"
 )
@@ -11,13 +10,8 @@ type ProfilePostgresStore struct {
 	db *gorm.DB
 }
 
-func NewProfilePostgresStore(host, port, dbname, user, password string) (*ProfilePostgresStore, error) {
-	db, err := db.NewPostgresConnection(host, port, dbname, user, password)
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.AutoMigrate(&model.Profile{})
+func NewProfilePostgresStore(db *gorm.DB) (*ProfilePostgresStore, error) {
+	err := db.AutoMigrate(&model.Profile{})
 	if err != nil {
 		return nil, err
 	}

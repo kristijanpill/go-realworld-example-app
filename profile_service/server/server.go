@@ -6,12 +6,14 @@ import (
 	"net"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/kristijanpill/go-realworld-example-app/common/db"
 	"github.com/kristijanpill/go-realworld-example-app/common/proto/pb"
 	"github.com/kristijanpill/go-realworld-example-app/profile_service/config"
 	"github.com/kristijanpill/go-realworld-example-app/profile_service/handler"
 	"github.com/kristijanpill/go-realworld-example-app/profile_service/service"
 	"github.com/kristijanpill/go-realworld-example-app/profile_service/store"
 	"google.golang.org/grpc"
+	"gorm.io/gorm"
 )
 
 type Server struct {
@@ -29,7 +31,8 @@ func NewServer(config *config.Config) *Server {
 }
 
 func (server *Server) Start() {
-	profileStore := server.initProfileStore()
+	db := server.initDbConnection()
+	profileStore := server.initProfilePostgresStore(db)
 	profileService := service.NewProfileService(profileStore)
 	profileHandler := handler.NewProfileHandler(profileService)
 
@@ -46,10 +49,19 @@ func (server *Server) Start() {
 	}
 }
 
-func (server *Server) initProfileStore() store.ProfileStore {
-	profileStore, err := store.NewProfilePostgresStore(server.config.ProfileDatabaseHost, server.config.ProfileDatabasePort, server.config.ProfileDatabaseName, server.config.ProfileDatabaseUser, server.config.ProfileDatabasePassword)
+func (server *Server) initDbConnection() *gorm.DB {
+	db, err := db.NewPostgresConnection(server.config.ProfileDatabaseHost, server.config.ProfileDatabasePort, server.config.ProfileDatabaseName, server.config.ProfileDatabaseUser, server.config.ProfileDatabasePassword)
 	if err != nil {
-		log.Fatal("cannot connect to database: ", err)
+		log.Fatal("failed to connect to database: ", err)
+	}
+
+	return db
+}
+
+func (server *Server) initProfilePostgresStore(db *gorm.DB) *store.ProfilePostgresStore {
+	profileStore, err := store.NewProfilePostgresStore(db)
+	if err != nil {
+		log.Fatal("failed to init profile store: ", err)
 	}
 
 	return profileStore
