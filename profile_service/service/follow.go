@@ -12,6 +12,7 @@ import (
 
 var ErrUserAlreadyFollowed = errors.New("user already followed")
 var ErrUserNotFollowed = errors.New("user not followed")
+var ErrSelfFollow = errors.New("cannot follow self")
 
 type FollowService struct {
 	followStore store.FollowStore
@@ -36,6 +37,10 @@ func (service *FollowService) FollowUserByUsername(ctx context.Context, request 
 	targetUserProfile, err := service.profileStore.FindByUsername(request.Username)
 	if err != nil {
 		return nil, err
+	}
+
+	if (currentUserIdString == targetUserProfile.ID.String()) {
+		return nil, ErrSelfFollow
 	}
 
 	if (service.followStore.ExistsByProfileIdAndTargetId(currentUserProfile.ID.String(), targetUserProfile.ID.String())) {
