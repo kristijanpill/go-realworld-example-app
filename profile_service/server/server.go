@@ -37,9 +37,7 @@ func (server *Server) Start() {
 	db := server.initDbConnection()
 	profileStore := server.initProfilePostgresStore(db)
 	profileService := service.NewProfileService(profileStore)
-	followStore := server.initFollowPostgresStore(db)
-	followService := service.NewFollowService(followStore, profileStore)
-	profileHandler := handler.NewProfileHandler(profileService, followService)
+	profileHandler := handler.NewProfileHandler(profileService)
 
 	publicKey := server.initPublicKey()
 	authInterceptor := interceptor.NewAuthInterceptor("Token", server.config.RestrictedPaths, publicKey)
@@ -73,15 +71,6 @@ func (server *Server) initProfilePostgresStore(db *gorm.DB) *store.ProfilePostgr
 	}
 
 	return profileStore
-}
-
-func (server *Server) initFollowPostgresStore(db *gorm.DB) *store.FollowPostgresStore {
-	followStore, err := store.NewFollowPostgresStore(db)
-	if err != nil {
-		log.Fatal("failed to init follow store: ", err)
-	}
-
-	return followStore
 }
 
 func (server *Server) initPublicKey() *rsa.PublicKey {

@@ -8,10 +8,3 @@ type Follow struct {
 	TargetID  uuid.UUID `gorm:"primaryKey; type:uuid;"`
 	Target    Profile
 }
-
-func NewFollow(profileId, targetId uuid.UUID) *Follow {
-	return &Follow{
-		ProfileID: profileId,
-		TargetID: targetId,
-	}
-}

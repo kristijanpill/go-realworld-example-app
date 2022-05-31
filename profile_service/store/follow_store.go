@@ -6,6 +6,5 @@ import (
 
 type FollowStore interface {
 	Create(*model.Follow) (*model.Follow, error)
-	Delete(*model.Follow) error
-	ExistsByProfileIdAndTargetId(profileId, targetId string) bool
+	Delete(*model.Follow) (*model.Follow, error)
 }

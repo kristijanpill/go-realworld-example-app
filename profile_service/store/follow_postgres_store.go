@@ -31,8 +31,3 @@ func (store *FollowPostgresStore) Delete(follow *model.Follow) error {
 
 	return result.Error
 }
-
-func (store *FollowPostgresStore) ExistsByProfileIdAndTargetId(profileId, targetId string) bool {
-	var follow model.Follow
-	return store.db.Where("profile_id = ? AND target_id = ?", profileId, targetId).First(&follow).RowsAffected == 1
-}
