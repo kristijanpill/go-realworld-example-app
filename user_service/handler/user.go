@@ -5,6 +5,7 @@ import (
 
 	"github.com/kristijanpill/go-realworld-example-app/common/proto/pb"
 	"github.com/kristijanpill/go-realworld-example-app/user_service/service"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type UserHandler struct {
@@ -24,4 +25,8 @@ func (handler *UserHandler) CreateUser(ctx context.Context, request *pb.NewUserR
 
 func (handler *UserHandler) Login(ctx context.Context, request *pb.LoginUserRequest) (*pb.UserResponse, error) {
 	return handler.service.Login(request)
+}
+
+func (handler *UserHandler) GetCurrentUser(ctx context.Context, request *emptypb.Empty) (*pb.UserResponse, error) {
+	return handler.service.GetCurrentUser(ctx)
 }

@@ -59,12 +59,16 @@ func (interceptor *AuthInterceptor) authorize(ctx context.Context, method string
 		return ctx, status.Errorf(codes.Unauthenticated, "unauthorized")
 	}
 
-	claims, err := interceptor.verifyToken(parts[1])
+	token := parts[1]
+	claims, err := interceptor.verifyToken(token)
 	if err != nil {
 		return ctx, status.Errorf(codes.Unauthenticated, "unauthorized")
 	}
 
-	return context.WithValue(ctx, CurrentUserKey{}, claims.Subject), nil
+	ctx = context.WithValue(ctx, TokenKey{}, token)
+	ctx = context.WithValue(ctx, CurrentUserKey{}, claims.Subject)
+	
+	return ctx, nil
 }
 
 func (interceptor *AuthInterceptor) verifyToken(accessToken string) (*jwt.StandardClaims, error) {
@@ -94,3 +98,4 @@ func (interceptor *AuthInterceptor) verifyToken(accessToken string) (*jwt.Standa
 }
 
 type CurrentUserKey struct{}
+type TokenKey struct{}

@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 
+	"github.com/google/uuid"
+	"github.com/kristijanpill/go-realworld-example-app/common/interceptor"
 	"github.com/kristijanpill/go-realworld-example-app/common/proto/pb"
 	"github.com/kristijanpill/go-realworld-example-app/user_service/model"
 	"github.com/kristijanpill/go-realworld-example-app/user_service/store"
@@ -84,4 +86,31 @@ func (service *UserService) Login(request *pb.LoginUserRequest) (*pb.UserRespons
 			Image: profile.Profile.Image,
 		},
 	}, nil
+}
+
+func (service *UserService) GetCurrentUser(ctx context.Context) (*pb.UserResponse, error) {
+	email := ctx.Value(interceptor.CurrentUserKey{}).(string)
+	user, err := service.store.FindByEmail(email)
+	if err != nil {
+		return nil, err
+	}
+
+	profile, err := service.getUserProfile(user.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	token := ctx.Value(interceptor.TokenKey{}).(string)
+
+	return &pb.UserResponse{User: &pb.User{
+		Email: user.Email,
+		Token: token,
+		Username: profile.Profile.Username,
+		Bio: profile.Profile.Bio,
+		Image: profile.Profile.Image,
+	}}, nil
+}
+
+func (service *UserService) getUserProfile(id uuid.UUID) (*pb.ProfileResponse, error) {
+	return service.profileServiceClient.GetProfileById(context.Background(), &pb.ProfileIdRequest{Id: id.String()})
 }
