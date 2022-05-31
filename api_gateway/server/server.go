@@ -32,17 +32,14 @@ func NewServer(config *config.Config) *Server {
 func (server *Server) initGatewayHandlers() {
 	dialOptions := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
 	userServiceEndpoint := formatEndpoint(server.config.UserServiceHost, server.config.UserServicePort)
-	err := pb.RegisterUserServiceHandlerFromEndpoint(ctx, server.mux, userServiceEndpoint, dialOptions)
+	err := pb.RegisterUserServiceHandlerFromEndpoint(context.Background(), server.mux, userServiceEndpoint, dialOptions)
 	if err != nil {
 		log.Fatal("cannot register user service handler: ", err)
 	}
 
 	profileServiceEndpoint := formatEndpoint(server.config.ProfileServiceHost, server.config.ProfileServiceHost)
-	err = pb.RegisterProfileServiceHandlerFromEndpoint(ctx, server.mux, profileServiceEndpoint, dialOptions)
+	err = pb.RegisterProfileServiceHandlerFromEndpoint(context.Background(), server.mux, profileServiceEndpoint, dialOptions)
 	if err != nil {
 		log.Fatal("cannot register profile service handler: ", err)
 	}

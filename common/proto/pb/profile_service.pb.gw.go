@@ -32,7 +32,7 @@ var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
 func request_ProfileService_GetProfileByUsername_0(ctx context.Context, marshaler runtime.Marshaler, client ProfileServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ProfileRequest
+	var protoReq ProfileUsernameRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -58,7 +58,7 @@ func request_ProfileService_GetProfileByUsername_0(ctx context.Context, marshale
 }
 
 func local_request_ProfileService_GetProfileByUsername_0(ctx context.Context, marshaler runtime.Marshaler, server ProfileServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ProfileRequest
+	var protoReq ProfileUsernameRequest
 	var metadata runtime.ServerMetadata
 
 	var (
