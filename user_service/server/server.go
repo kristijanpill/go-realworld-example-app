@@ -38,7 +38,7 @@ func (server *Server) Start() {
 	profileServiceClient := server.initProfileServiceClient()
 	userService := service.NewUserService(userStore, jwtManager, profileServiceClient)
 	userHandler := handler.NewUserHandler(userService)
-	authInterceptor := interceptor.NewAuthInterceptor(server.config.RestrictedPaths, publicKey)
+	authInterceptor := interceptor.NewAuthInterceptor("Token", server.config.RestrictedPaths, publicKey)
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", server.config.Port))
 	if err != nil {

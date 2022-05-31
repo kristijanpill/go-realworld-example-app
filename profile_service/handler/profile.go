@@ -22,6 +22,10 @@ func(handler *ProfileHandler) CreateProfile(ctx context.Context, request *pb.Cre
 	return handler.service.CreateProfile(request)
 }
 
-func (handler *ProfileHandler) GetProfileById(ctx context.Context, request *pb.ProfileIdRequest) (*pb.ProfileResponse, error) {
+func (handler *ProfileHandler) GetProfileById(ctx context.Context, request *pb.ProfileIdRequest) (*pb.ProfileInfo, error) {
 	return handler.service.FindById(request)
+}
+
+func (handler *ProfileHandler) UpdateProfile(ctx context.Context, request *pb.UpdateProfileRequest) (*pb.ProfileInfo, error) {
+	return handler.service.UpdateProfile(request)
 }

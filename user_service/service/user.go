@@ -44,7 +44,7 @@ func (service *UserService) Register(request *pb.NewUserRequest) (*pb.UserRespon
 		return nil, err
 	}
 
-	_, err = service.store.Save(user)
+	_, err = service.store.Create(user)
 	if err != nil {
 		return nil, err
 	}
@@ -81,9 +81,9 @@ func (service *UserService) Login(request *pb.LoginUserRequest) (*pb.UserRespons
 		User: &pb.User{
 			Email: user.Email,
 			Token: token,
-			Username: profile.Profile.Username,
-			Bio: profile.Profile.Bio,
-			Image: profile.Profile.Image,
+			Username: profile.Username,
+			Bio: profile.Bio,
+			Image: profile.Image,
 		},
 	}, nil
 }
@@ -95,7 +95,7 @@ func (service *UserService) GetCurrentUser(ctx context.Context) (*pb.UserRespons
 		return nil, err
 	}
 
-	profile, err := service.getUserProfile(user.ID)
+	profile, err := service.getProfile(user.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -105,12 +105,56 @@ func (service *UserService) GetCurrentUser(ctx context.Context) (*pb.UserRespons
 	return &pb.UserResponse{User: &pb.User{
 		Email: user.Email,
 		Token: token,
-		Username: profile.Profile.Username,
-		Bio: profile.Profile.Bio,
-		Image: profile.Profile.Image,
+		Username: profile.Username,
+		Bio: profile.Bio,
+		Image: profile.Image,
 	}}, nil
 }
 
-func (service *UserService) getUserProfile(id uuid.UUID) (*pb.ProfileResponse, error) {
+func (service *UserService) UpdateCurrentUser(ctx context.Context, request *pb.UpdateUserRequest) (*pb.UserResponse, error) {
+	email := ctx.Value(interceptor.CurrentUserKey{}).(string)
+	user, err := service.store.FindByEmail(email)
+	if err != nil {
+		return nil, err
+	}
+
+	profile, err := service.updateProfile(user.ID, request.User.Username, request.User.Bio, request.User.Image)
+	if err != nil {
+		return nil, err
+	}
+
+	user.Email = request.User.Email
+	user, err = service.store.Update(user)
+	if err != nil {
+		return nil, err
+	}
+
+	token := ctx.Value(interceptor.TokenKey{}).(string)
+
+	return &pb.UserResponse{
+		User: &pb.User{
+			Email: user.Email,
+			Token: token,
+			Username: profile.Username,
+			Bio: profile.Bio,
+			Image: profile.Image,
+		},
+	}, nil
+}
+
+func (service *UserService) getProfile(id uuid.UUID) (*pb.ProfileInfo, error) {
 	return service.profileServiceClient.GetProfileById(context.Background(), &pb.ProfileIdRequest{Id: id.String()})
+}
+
+func (service *UserService) updateProfile(id uuid.UUID, username, bio, image string) (*pb.ProfileInfo, error) {
+	request := &pb.UpdateProfileRequest{
+		Id: id.String(),
+		Profile: &pb.ProfileInfo{
+			Username: username,
+			Bio: bio,
+			Image: image,
+		},
+	}
+
+	return service.profileServiceClient.UpdateProfile(context.Background(), request)
 }

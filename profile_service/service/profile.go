@@ -23,7 +23,7 @@ func (service *ProfileService) CreateProfile(request *pb.CreateProfileRequest) (
 		return nil, err
 	}
 
-	_, err = service.store.Save(profile)
+	_, err = service.store.Create(profile)
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func (service *ProfileService) CreateProfile(request *pb.CreateProfileRequest) (
 	}, nil
 }
 
-func (service *ProfileService) FindById(request *pb.ProfileIdRequest) (*pb.ProfileResponse, error) {
+func (service *ProfileService) FindById(request *pb.ProfileIdRequest) (*pb.ProfileInfo, error) {
 	id, err := uuid.Parse(request.Id)
 	if err != nil {
 		return nil, err
@@ -46,12 +46,32 @@ func (service *ProfileService) FindById(request *pb.ProfileIdRequest) (*pb.Profi
 		return nil, err
 	}
 
-	return &pb.ProfileResponse{
-		Profile: &pb.Profile{
-			Username: profile.Username,
-			Bio: profile.Bio,
-			Image: profile.Image,
-			Following: false,
-		},
+	return &pb.ProfileInfo{
+		Username: profile.Username,
+		Bio: profile.Bio,
+		Image: profile.Image,
 	}, nil
+}
+
+func (service *ProfileService) UpdateProfile(request *pb.UpdateProfileRequest) (*pb.ProfileInfo, error) {
+	id, err := uuid.Parse(request.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	profile, err := service.store.FindById(id)
+	if err != nil {
+		return nil, err
+	}
+
+	profile.Username = request.Profile.Username
+	profile.Bio = request.Profile.Bio
+	profile.Image = request.Profile.Image
+
+	_, err = service.store.Update(profile)
+	if err != nil {
+		return nil, err
+	}
+
+	return request.Profile, nil
 }

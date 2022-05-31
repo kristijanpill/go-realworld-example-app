@@ -27,7 +27,7 @@ func NewProfilePostgresStore(host, port, dbname, user, password string) (*Profil
 	}, nil
 }
 
-func (store *ProfilePostgresStore) Save(profile *model.Profile) (*model.Profile, error) {
+func (store *ProfilePostgresStore) Create(profile *model.Profile) (*model.Profile, error) {
 	result := store.db.Create(profile)
 
 	return profile, result.Error
@@ -38,4 +38,10 @@ func (store *ProfilePostgresStore) FindById(id uuid.UUID) (*model.Profile, error
 	result := store.db.Where("id = ?", id.String()).First(&profile)
 
 	return &profile, result.Error
+}
+
+func (store *ProfilePostgresStore) Update(profile *model.Profile) (*model.Profile, error) {
+	result := store.db.Save(profile)
+
+	return profile, result.Error
 }
