@@ -33,6 +33,13 @@ func (store *ProfilePostgresStore) FindById(id string) (*model.Profile, error) {
 	return &profile, result.Error
 }
 
+func (store *ProfilePostgresStore) FindByUsername(username string) (*model.Profile, error) {
+	var profile model.Profile
+	result := store.db.Where("username = ?", username).First(&profile)
+
+	return &profile, result.Error
+}
+
 func (store *ProfilePostgresStore) Update(profile *model.Profile) (*model.Profile, error) {
 	result := store.db.Save(profile)
 
