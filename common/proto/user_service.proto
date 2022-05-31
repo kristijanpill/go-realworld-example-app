@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package user;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = ".;pb";
+
+message LoginUser {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginUserRequest {
+  LoginUser user = 1;
+}
+
+message NewUser {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message NewUserRequest {
+  NewUser user = 1;
+}
+
+message User {
+  string email = 1;
+  string token = 2;
+  string username = 3;
+  string bio = 4;
+  string image = 5;
+}
+
+message UserResponse {
+  User user = 1;
+}
+
+message UpdateUser {
+  string email = 1;
+  string token = 2;
+  string username = 3;
+  string bio = 4;
+  string image = 5;
+}
+
+message UpdateUserRequest {
+  UpdateUser user = 1;
+}
+
+service UserService {
+  rpc Login(LoginUserRequest) returns (UserResponse) {
+    option (google.api.http) = {
+      post: "/api/users/login",
+      body: "*"
+    };
+  }
+  rpc CreateUser(NewUserRequest) returns (UserResponse) {
+    option (google.api.http) = {
+      post: "/api/users",
+      body: "*"
+    };
+  }
+  rpc GetCurrentUser(google.protobuf.Empty) returns (UserResponse) {
+    option (google.api.http) = {
+      get: "/api/user"
+    };
+  }
+  rpc UpdateCurrentUser(UpdateUserRequest) returns (UserResponse) {
+    option (google.api.http) = {
+      put: "/api/user",
+      body: "*"
+    };
+  }
+}

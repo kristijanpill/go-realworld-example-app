@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package profile;
+
+import "google/api/annotations.proto";
+
+option go_package = ".;pb";
+
+message Profile {
+  string username = 1;
+  string bio = 2;
+  string image = 3;
+  bool following = 4;
+}
+
+message ProfileResponse {
+  Profile profile = 1;
+}
+
+message ProfileUsernameRequest {
+  string username = 1;
+}
+
+message FollowRequest {
+  string username = 1;
+}
+
+message UnfollowRequest {
+  string username = 1;
+}
+
+message ProfileInfo {
+  string username = 1;
+  string bio = 2;
+  string image = 3;
+}
+
+message CreateProfileRequest {
+  string id = 1;
+  ProfileInfo profile = 2;
+}
+
+message ProfileIdRequest {
+  string id = 1;
+}
+
+service ProfileService {
+  rpc GetProfileByUsername(ProfileUsernameRequest) returns (ProfileResponse) {
+    option (google.api.http) = {
+      get: "/api/profiles/{username}"
+    };
+  }
+  rpc FollowUserByUsername(FollowRequest) returns (ProfileResponse) {
+    option (google.api.http) = {
+      post: "/api/profiles/{username}/follow"
+      body: "*"
+    };
+  }
+  rpc UnfollowUserByUsername(UnfollowRequest) returns (ProfileResponse) {
+    option (google.api.http) = {
+      delete: "/api/profiles/{username}/follow"
+    };
+  }
+  rpc GetProfileById(ProfileIdRequest) returns (ProfileResponse) {}
+  rpc CreateProfile(CreateProfileRequest) returns (ProfileInfo) {}
+}
