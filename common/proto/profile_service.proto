@@ -44,6 +44,11 @@ message ProfileIdRequest {
   string id = 1;
 }
 
+message UpdateProfileRequest {
+  string id = 1;
+  ProfileInfo profile = 2;
+}
+
 service ProfileService {
   rpc GetProfileByUsername(ProfileUsernameRequest) returns (ProfileResponse) {
     option (google.api.http) = {
@@ -61,6 +66,7 @@ service ProfileService {
       delete: "/api/profiles/{username}/follow"
     };
   }
-  rpc GetProfileById(ProfileIdRequest) returns (ProfileResponse) {}
+  rpc GetProfileById(ProfileIdRequest) returns (ProfileInfo) {}
   rpc CreateProfile(CreateProfileRequest) returns (ProfileInfo) {}
+  rpc UpdateProfile(UpdateProfileRequest) returns (ProfileInfo) {}
 }

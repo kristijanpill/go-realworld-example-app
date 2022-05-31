@@ -26,7 +26,7 @@ func NewUserPostgresStore(host, port, dbname, user, password string) (*UserPostg
 	}, nil
 }
 
-func (store *UserPostgresStore) Save(user *model.User) (*model.User, error) {
+func (store *UserPostgresStore) Create(user *model.User) (*model.User, error) {
 	result := store.db.Create(user)
 
 	return user, result.Error
@@ -37,4 +37,10 @@ func (store *UserPostgresStore) FindByEmail(email string) (*model.User, error) {
 	result := store.db.Where("email = ?", email).First(&user)
 
 	return &user, result.Error
+}
+
+func (store *UserPostgresStore) Update(user *model.User) (*model.User, error) {
+	result := store.db.Save(user)
+
+	return user, result.Error
 }

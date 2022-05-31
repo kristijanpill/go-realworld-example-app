@@ -6,6 +6,7 @@ import (
 )
 
 type ProfileStore interface {
-	Save(*model.Profile) (*model.Profile, error)
+	Create(*model.Profile) (*model.Profile, error)
 	FindById(uuid.UUID) (*model.Profile, error)
+	Update(*model.Profile) (*model.Profile, error)
 }

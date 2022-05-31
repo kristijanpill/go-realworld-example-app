@@ -14,12 +14,14 @@ import (
 )
 
 type AuthInterceptor struct {
+	tokenPrefix string
 	restrictedPaths map[string]bool
 	publicKey       *rsa.PublicKey
 }
 
-func NewAuthInterceptor(restrictedPaths map[string]bool, publicKey *rsa.PublicKey) *AuthInterceptor {
+func NewAuthInterceptor(tokenPrefix string, restrictedPaths map[string]bool, publicKey *rsa.PublicKey) *AuthInterceptor {
 	return &AuthInterceptor{
+		tokenPrefix: tokenPrefix,
 		restrictedPaths: restrictedPaths,
 		publicKey:       publicKey,
 	}
@@ -59,6 +61,10 @@ func (interceptor *AuthInterceptor) authorize(ctx context.Context, method string
 		return ctx, status.Errorf(codes.Unauthenticated, "unauthorized")
 	}
 
+	if (parts[0] != interceptor.tokenPrefix) {
+		return ctx, status.Error(codes.Unauthenticated, "unauthorized")
+	}
+
 	token := parts[1]
 	claims, err := interceptor.verifyToken(token)
 	if err != nil {
@@ -67,7 +73,7 @@ func (interceptor *AuthInterceptor) authorize(ctx context.Context, method string
 
 	ctx = context.WithValue(ctx, TokenKey{}, token)
 	ctx = context.WithValue(ctx, CurrentUserKey{}, claims.Subject)
-	
+
 	return ctx, nil
 }
 

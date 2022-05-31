@@ -30,3 +30,7 @@ func (handler *UserHandler) Login(ctx context.Context, request *pb.LoginUserRequ
 func (handler *UserHandler) GetCurrentUser(ctx context.Context, request *emptypb.Empty) (*pb.UserResponse, error) {
 	return handler.service.GetCurrentUser(ctx)
 }
+
+func (handler *UserHandler) UpdateCurrentUser(ctx context.Context, request *pb.UpdateUserRequest) (*pb.UserResponse, error) {
+	return handler.service.UpdateCurrentUser(ctx, request)
+}
