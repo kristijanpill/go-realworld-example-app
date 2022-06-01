@@ -11,7 +11,10 @@ import (
 	"github.com/kristijanpill/go-realworld-example-app/user_service/store"
 )
 
-var ErrUserNotActivated = errors.New("user is not activated")
+var (
+	ErrUserNotActivated = errors.New("user is not activated")
+	ErrInvalidUsernameOrPassword = errors.New("invalid username or password")
+)
 
 type UserService struct {
 	store store.UserStore
@@ -67,6 +70,10 @@ func (service *UserService) Login(request *pb.LoginUserRequest) (*pb.UserRespons
 		return nil, ErrUserNotActivated
 	}
 
+	if (!user.CheckPassword(request.User.Password)) {
+		return nil, ErrInvalidUsernameOrPassword
+	}
+
 	profile, err := service.profileServiceClient.GetProfileById(context.Background(), &pb.ProfileIdRequest{Id: user.ID.String()})
 	if err != nil {
 		return nil, err
@@ -89,8 +96,9 @@ func (service *UserService) Login(request *pb.LoginUserRequest) (*pb.UserRespons
 }
 
 func (service *UserService) GetCurrentUser(ctx context.Context) (*pb.UserResponse, error) {
-	email := ctx.Value(interceptor.CurrentUserKey{}).(string)
-	user, err := service.store.FindByEmail(email)
+	id := ctx.Value(interceptor.CurrentUserKey{}).(string)
+	
+	user, err := service.store.FindById(id)
 	if err != nil {
 		return nil, err
 	}
@@ -112,8 +120,8 @@ func (service *UserService) GetCurrentUser(ctx context.Context) (*pb.UserRespons
 }
 
 func (service *UserService) UpdateCurrentUser(ctx context.Context, request *pb.UpdateUserRequest) (*pb.UserResponse, error) {
-	email := ctx.Value(interceptor.CurrentUserKey{}).(string)
-	user, err := service.store.FindByEmail(email)
+	id := ctx.Value(interceptor.CurrentUserKey{}).(string)
+	user, err := service.store.FindById(id)
 	if err != nil {
 		return nil, err
 	}

@@ -1,8 +1,6 @@
 package store
 
 import (
-	"github.com/google/uuid"
-	"github.com/kristijanpill/go-realworld-example-app/common/db"
 	"github.com/kristijanpill/go-realworld-example-app/profile_service/model"
 	"gorm.io/gorm"
 )
@@ -11,13 +9,8 @@ type ProfilePostgresStore struct {
 	db *gorm.DB
 }
 
-func NewProfilePostgresStore(host, port, dbname, user, password string) (*ProfilePostgresStore, error) {
-	db, err := db.NewPostgresConnection(host, port, dbname, user, password)
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.AutoMigrate(&model.Profile{})
+func NewProfilePostgresStore(db *gorm.DB) (*ProfilePostgresStore, error) {
+	err := db.AutoMigrate(&model.Profile{})
 	if err != nil {
 		return nil, err
 	}
@@ -33,9 +26,16 @@ func (store *ProfilePostgresStore) Create(profile *model.Profile) (*model.Profil
 	return profile, result.Error
 }
 
-func (store *ProfilePostgresStore) FindById(id uuid.UUID) (*model.Profile, error) {
+func (store *ProfilePostgresStore) FindById(id string) (*model.Profile, error) {
 	var profile model.Profile
-	result := store.db.Where("id = ?", id.String()).First(&profile)
+	result := store.db.Where("id = ?", id).First(&profile)
+
+	return &profile, result.Error
+}
+
+func (store *ProfilePostgresStore) FindByUsername(username string) (*model.Profile, error) {
+	var profile model.Profile
+	result := store.db.Where("username = ?", username).First(&profile)
 
 	return &profile, result.Error
 }

@@ -38,7 +38,7 @@ func (server *Server) initGatewayHandlers() {
 		log.Fatal("cannot register user service handler: ", err)
 	}
 
-	profileServiceEndpoint := formatEndpoint(server.config.ProfileServiceHost, server.config.ProfileServiceHost)
+	profileServiceEndpoint := formatEndpoint(server.config.ProfileServiceHost, server.config.ProfileServicePort)
 	err = pb.RegisterProfileServiceHandlerFromEndpoint(context.Background(), server.mux, profileServiceEndpoint, dialOptions)
 	if err != nil {
 		log.Fatal("cannot register profile service handler: ", err)
