@@ -26,6 +26,10 @@ func NewFollowService(followStore store.FollowStore, profileStore store.ProfileS
 	}
 }
 
+func (service *FollowService) ExistsByProfileIdAndTargetId(profileId, targetId string) bool {
+	return service.followStore.ExistsByProfileIdAndTargetId(profileId, targetId)
+}
+
 func (service *FollowService) FollowUserByUsername(ctx context.Context, request *pb.FollowRequest) (*pb.ProfileResponse, error) {
 	currentUserIdString := ctx.Value(interceptor.CurrentUserKey{}).(string)
 

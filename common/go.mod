@@ -5,8 +5,8 @@ go 1.18
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.2
-	google.golang.org/genproto v0.0.0-20220527130721-00d5c0f3be58
-	google.golang.org/grpc v1.46.2
+	google.golang.org/genproto v0.0.0-20220601144221-27df5f98adab
+	google.golang.org/grpc v1.47.0
 	google.golang.org/protobuf v1.28.0
 	gorm.io/driver/postgres v1.3.7
 	gorm.io/gorm v1.23.5
@@ -14,6 +14,7 @@ require (
 
 require (
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.12.1 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
@@ -25,7 +26,7 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
-	golang.org/x/net v0.0.0-20220526153639-5463443f8c37 // indirect
+	golang.org/x/net v0.0.0-20220531201128-c960675eff93 // indirect
 	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
 	golang.org/x/text v0.3.7 // indirect
 )

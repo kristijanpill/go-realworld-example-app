@@ -16,13 +16,17 @@ func NewProfileService(store store.ProfileStore) *ProfileService {
 	}
 }
 
-func (service *ProfileService) CreateProfile(request *pb.CreateProfileRequest) (*pb.ProfileInfo, error) {
- 	profile, err := model.NewProfile(request.Id, request.Profile.Username, request.Profile.Bio, request.Profile.Image)
+func (service *ProfileService) GetProfileByUsername(request *pb.ProfileUsernameRequest) (*model.Profile, error) {
+	profile, err := service.store.FindByUsername(request.Username)
 	if err != nil {
 		return nil, err
 	}
 
-	_, err = service.store.Create(profile)
+	return profile, nil
+}
+
+func (service *ProfileService) GetProfileById(request *pb.ProfileIdRequest) (*pb.ProfileInfo, error) {
+	profile, err := service.store.FindById(request.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -34,8 +38,13 @@ func (service *ProfileService) CreateProfile(request *pb.CreateProfileRequest) (
 	}, nil
 }
 
-func (service *ProfileService) FindById(request *pb.ProfileIdRequest) (*pb.ProfileInfo, error) {
-	profile, err := service.store.FindById(request.Id)
+func (service *ProfileService) CreateProfile(request *pb.CreateProfileRequest) (*pb.ProfileInfo, error) {
+	profile, err := model.NewProfile(request.Id, request.Profile.Username, request.Profile.Bio, request.Profile.Image)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = service.store.Create(profile)
 	if err != nil {
 		return nil, err
 	}

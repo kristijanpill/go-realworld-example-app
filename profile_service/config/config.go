@@ -16,12 +16,12 @@ type Config struct {
 func NewConfig() *Config {
 	return &Config{
 		Port:                    os.Getenv("API_GATEWAY_PORT"),
-		PublicKey:               os.Getenv("PUBLIC_KEY"),
 		ProfileDatabaseHost:     os.Getenv("PROFILE_DATABASE_HOST"),
 		ProfileDatabasePort:     os.Getenv("PROFILE_DATABASE_PORT"),
 		ProfileDatabaseUser:     os.Getenv("PROFILE_DATABASE_USER"),
 		ProfileDatabasePassword: os.Getenv("PROFILE_DATABASE_PASSWORD"),
 		ProfileDatabaseName:     os.Getenv("PROFILE_DATABASE_NAME"),
+		PublicKey:               os.Getenv("PUBLIC_KEY"),
 		RestrictedPaths:         restrictedPaths(),
 	}
 }
@@ -30,6 +30,7 @@ func restrictedPaths() map[string]bool {
 	const profileService = "/profile.ProfileService/"
 
 	return map[string]bool{
+		profileService + "GetProfileByUsername":   false,
 		profileService + "FollowUserByUsername":   true,
 		profileService + "UnfollowUserByUsername": true,
 	}

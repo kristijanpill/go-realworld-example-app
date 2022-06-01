@@ -4,12 +4,11 @@ import (
 	"context"
 	"crypto/rsa"
 	"fmt"
-	"strings"
 
 	"github.com/dgrijalva/jwt-go"
+	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 )
 
@@ -39,33 +38,20 @@ func (interceptor *AuthInterceptor) Unary() grpc.UnaryServerInterceptor {
 }
 
 func (interceptor *AuthInterceptor) authorize(ctx context.Context, method string) (context.Context, error) {
-	_, ok := interceptor.restrictedPaths[method]
+	isAuthRequired, ok := interceptor.restrictedPaths[method]
 	if !ok {
 		return ctx, nil
 	}
 
-	var values []string
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return ctx, status.Errorf(codes.Unauthenticated, "unauthorized")
+	token, err := grpc_auth.AuthFromMD(ctx, interceptor.tokenPrefix)
+	if err != nil {
+		if isAuthRequired {
+			return nil, err
+		} else {
+			return ctx, nil
+		}
 	}
 
-	values = md.Get("Authorization")
-	if len(values) == 0 {
-		return ctx, status.Errorf(codes.Unauthenticated, "unauthorized")
-	}
-
-	authHeader := values[0]
-	parts := strings.Split(authHeader, " ")
-	if len(parts) != 2 {
-		return ctx, status.Errorf(codes.Unauthenticated, "unauthorized")
-	}
-
-	if (parts[0] != interceptor.tokenPrefix) {
-		return ctx, status.Error(codes.Unauthenticated, "unauthorized")
-	}
-
-	token := parts[1]
 	claims, err := interceptor.verifyToken(token)
 	if err != nil {
 		return ctx, status.Errorf(codes.Unauthenticated, "unauthorized")
