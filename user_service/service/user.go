@@ -11,7 +11,10 @@ import (
 	"github.com/kristijanpill/go-realworld-example-app/user_service/store"
 )
 
-var ErrUserNotActivated = errors.New("user is not activated")
+var (
+	ErrUserNotActivated = errors.New("user is not activated")
+	ErrInvalidUsernameOrPassword = errors.New("invalid username or password")
+)
 
 type UserService struct {
 	store store.UserStore
@@ -65,6 +68,10 @@ func (service *UserService) Login(request *pb.LoginUserRequest) (*pb.UserRespons
 
 	if (!user.Active) {
 		return nil, ErrUserNotActivated
+	}
+
+	if (!user.CheckPassword(request.User.Password)) {
+		return nil, ErrInvalidUsernameOrPassword
 	}
 
 	profile, err := service.profileServiceClient.GetProfileById(context.Background(), &pb.ProfileIdRequest{Id: user.ID.String()})
