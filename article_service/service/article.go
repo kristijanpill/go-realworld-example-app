@@ -42,7 +42,9 @@ func (service *ArticleService) GetArticles(ctx context.Context, request *pb.GetA
 	if request.Tag != "" {
 		articles, err = service.findArticlesByTag(offset, limit, request.Tag)
 	} else if request.Author != "" {
-		articles, err = service.findArticlesByAuthor(request.Author, offset, limit)
+		if userId, errr := service.getProfileIdByUsername(request.Author); errr == nil {
+			articles, err = service.findArticlesByAuthor(offset, limit, userId.Id)
+		}
 	} else if request.Favorited != "" {
 		articles, err = service.findArticlesByFavoritedUsername(request.Favorited, offset, limit)
 	} else {
@@ -157,12 +159,18 @@ func (service *ArticleService) getProfileById(ctx context.Context, id string) (*
 	return service.profileServiceClient.GetProfileById(ctx, &pb.ProfileIdRequest{Id: id})
 }
 
+func (service *ArticleService) getProfileIdByUsername(username string) (*pb.ProfileIdResponse, error) {
+	return service.profileServiceClient.GetProfileIdByUsername(context.Background(), &pb.ProfileIdUsernameRequest{
+		Username: username,
+	})
+}
+
 func (service *ArticleService) findArticlesByTag(offset, limit int32, tag string) ([]*model.Article, error) {
 	return service.articleStore.FindByTag(offset, limit, tag)
 }
 
-func (service *ArticleService) findArticlesByAuthor(tag string, offset, limit int32) ([]*model.Article, error) {
-	return nil, nil
+func (service *ArticleService) findArticlesByAuthor(offset, limit int32, userId string) ([]*model.Article, error) {
+	return service.articleStore.FindByAuthor(offset, limit, userId)
 }
 
 func (service *ArticleService) findArticlesByFavoritedUsername(tag string, offset, limit int32) ([]*model.Article, error) {

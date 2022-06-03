@@ -28,6 +28,7 @@ type ProfileServiceClient interface {
 	GetProfileById(ctx context.Context, in *ProfileIdRequest, opts ...grpc.CallOption) (*ProfileResponse, error)
 	CreateProfile(ctx context.Context, in *CreateProfileRequest, opts ...grpc.CallOption) (*ProfileInfo, error)
 	UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*ProfileInfo, error)
+	GetProfileIdByUsername(ctx context.Context, in *ProfileIdUsernameRequest, opts ...grpc.CallOption) (*ProfileIdResponse, error)
 }
 
 type profileServiceClient struct {
@@ -92,6 +93,15 @@ func (c *profileServiceClient) UpdateProfile(ctx context.Context, in *UpdateProf
 	return out, nil
 }
 
+func (c *profileServiceClient) GetProfileIdByUsername(ctx context.Context, in *ProfileIdUsernameRequest, opts ...grpc.CallOption) (*ProfileIdResponse, error) {
+	out := new(ProfileIdResponse)
+	err := c.cc.Invoke(ctx, "/profile.ProfileService/GetProfileIdByUsername", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProfileServiceServer is the server API for ProfileService service.
 // All implementations must embed UnimplementedProfileServiceServer
 // for forward compatibility
@@ -102,6 +112,7 @@ type ProfileServiceServer interface {
 	GetProfileById(context.Context, *ProfileIdRequest) (*ProfileResponse, error)
 	CreateProfile(context.Context, *CreateProfileRequest) (*ProfileInfo, error)
 	UpdateProfile(context.Context, *UpdateProfileRequest) (*ProfileInfo, error)
+	GetProfileIdByUsername(context.Context, *ProfileIdUsernameRequest) (*ProfileIdResponse, error)
 	mustEmbedUnimplementedProfileServiceServer()
 }
 
@@ -126,6 +137,9 @@ func (UnimplementedProfileServiceServer) CreateProfile(context.Context, *CreateP
 }
 func (UnimplementedProfileServiceServer) UpdateProfile(context.Context, *UpdateProfileRequest) (*ProfileInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateProfile not implemented")
+}
+func (UnimplementedProfileServiceServer) GetProfileIdByUsername(context.Context, *ProfileIdUsernameRequest) (*ProfileIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProfileIdByUsername not implemented")
 }
 func (UnimplementedProfileServiceServer) mustEmbedUnimplementedProfileServiceServer() {}
 
@@ -248,6 +262,24 @@ func _ProfileService_UpdateProfile_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProfileService_GetProfileIdByUsername_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProfileIdUsernameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProfileServiceServer).GetProfileIdByUsername(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/profile.ProfileService/GetProfileIdByUsername",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProfileServiceServer).GetProfileIdByUsername(ctx, req.(*ProfileIdUsernameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProfileService_ServiceDesc is the grpc.ServiceDesc for ProfileService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +310,10 @@ var ProfileService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateProfile",
 			Handler:    _ProfileService_UpdateProfile_Handler,
+		},
+		{
+			MethodName: "GetProfileIdByUsername",
+			Handler:    _ProfileService_GetProfileIdByUsername_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -43,3 +43,7 @@ func(handler *ProfileHandler) CreateProfile(ctx context.Context, request *pb.Cre
 func (handler *ProfileHandler) UpdateProfile(ctx context.Context, request *pb.UpdateProfileRequest) (*pb.ProfileInfo, error) {
 	return handler.profileService.UpdateProfile(request)
 }
+
+func (handler *ProfileHandler) GetProfileIdByUsername(ctx context.Context, request *pb.ProfileIdUsernameRequest) (*pb.ProfileIdResponse, error) {
+	return handler.profileService.GetProfileIdByUsername(request)
+}

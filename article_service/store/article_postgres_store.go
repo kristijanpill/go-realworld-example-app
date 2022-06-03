@@ -35,12 +35,19 @@ func (store *ArticlePostgresStore) Find(offset, limit int32) ([]*model.Article, 
 
 func (store *ArticlePostgresStore) FindByTag(offset, limit int32, tag string) ([]*model.Article, error) {
 	var tagModel *model.Tag
-	store.db.Where("name = ?", tag).Find(&tagModel)
+	store.db.Where("name = ?", tag).First(&tagModel)
 	var articles []*model.Article
 	var err error
 	if tagModel != nil {
-		err = store.db.Model(tagModel).Preload("Tags").Association("Articles").Find(&articles)
+		err = store.db.Model(tagModel).Limit(int(limit)).Offset(int(offset)).Order("created_at desc").Preload("Tags").Association("Articles").Find(&articles)
 	}
 
 	return articles, err
+}
+
+func (store *ArticlePostgresStore) FindByAuthor(offset, limit int32, userId string) ([]*model.Article, error) {
+	var articles []*model.Article
+	result := store.db.Where("user_id = ?", userId).Limit(int(limit)).Offset(int(offset)).Order("created_at desc").Preload("Tags").Find(&articles)
+
+	return articles, result.Error
 }

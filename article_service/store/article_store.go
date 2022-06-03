@@ -6,4 +6,5 @@ type ArticleStore interface {
 	Create(*model.Article) (*model.Article, error)
 	Find(offset, limit int32) ([]*model.Article, error)
 	FindByTag(offset, limit int32, tag string) ([]*model.Article, error)
+	FindByAuthor(offset, limit int32, userId string) ([]*model.Article, error)
 }

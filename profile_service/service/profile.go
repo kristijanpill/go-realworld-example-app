@@ -98,3 +98,14 @@ func (service *ProfileService) UpdateProfile(request *pb.UpdateProfileRequest) (
 
 	return request.Profile, nil
 }
+
+func (service *ProfileService) GetProfileIdByUsername(request *pb.ProfileIdUsernameRequest) (*pb.ProfileIdResponse, error) {
+	profile, err := service.store.FindByUsername(request.Username)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.ProfileIdResponse{
+		Id: profile.ID.String(),
+	}, nil
+}
