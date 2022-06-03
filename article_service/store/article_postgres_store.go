@@ -33,6 +33,13 @@ func (store *ArticlePostgresStore) Find(offset, limit int32) ([]*model.Article, 
 	return articles, result.Error
 }
 
+func (store *ArticlePostgresStore) FindBySlug(slug string) (*model.Article, error) {
+	var article model.Article
+	result := store.db.Where("slug = ?", slug).Preload("Tags").First(&article)
+
+	return &article, result.Error
+}
+
 func (store *ArticlePostgresStore) FindByTag(offset, limit int32, tag string) ([]*model.Article, error) {
 	var tagModel *model.Tag
 	store.db.Where("name = ?", tag).First(&tagModel)

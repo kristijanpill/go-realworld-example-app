@@ -11,12 +11,14 @@ type ArticleHandler struct {
 	pb.UnimplementedArticleServiceServer
 	articleService *service.ArticleService
 	tagService *service.TagService
+	favoriteService *service.FavoriteService
 }
 
-func NewArticleHandler(articleService *service.ArticleService, tagService *service.TagService) *ArticleHandler {
+func NewArticleHandler(articleService *service.ArticleService, tagService *service.TagService, favoriteService *service.FavoriteService) *ArticleHandler {
 	return &ArticleHandler{
 		articleService: articleService,
 		tagService: tagService,
+		favoriteService: favoriteService,
 	}
 }
 
@@ -26,4 +28,8 @@ func (handler* ArticleHandler) GetArticles(ctx context.Context, request *pb.GetA
 
 func (handler *ArticleHandler) CreateArticle(ctx context.Context, request *pb.NewArticleRequest) (*pb.SingleArticleResponse, error) {
 	return handler.articleService.CreateArticle(ctx, request);
+}
+
+func (handler *ArticleHandler) CreateArticleFavorite(ctx context.Context, request *pb.CreateArticleFavoriteRequest) (*pb.SingleArticleResponse, error) {
+	return handler.favoriteService.CreateArticleFavorite(ctx, request)
 }
