@@ -52,7 +52,7 @@ func (store *ArticlePostgresStore) FindByTag(offset, limit int32, tag string) ([
 	return articles, err
 }
 
-func (store *ArticlePostgresStore) FindByAuthor(offset, limit int32, userId string) ([]*model.Article, error) {
+func (store *ArticlePostgresStore) FindByAuthorId(offset, limit int32, userId string) ([]*model.Article, error) {
 	var articles []*model.Article
 	result := store.db.Where("user_id = ?", userId).Limit(int(limit)).Offset(int(offset)).Order("created_at desc").Preload("Tags").Find(&articles)
 

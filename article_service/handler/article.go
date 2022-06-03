@@ -33,3 +33,7 @@ func (handler *ArticleHandler) CreateArticle(ctx context.Context, request *pb.Ne
 func (handler *ArticleHandler) CreateArticleFavorite(ctx context.Context, request *pb.CreateArticleFavoriteRequest) (*pb.SingleArticleResponse, error) {
 	return handler.favoriteService.CreateArticleFavorite(ctx, request)
 }
+
+func (handler *ArticleHandler) DeleteArticleFavorite(ctx context.Context, request *pb.DeleteArticleFavoriteRequest) (*pb.SingleArticleResponse, error) {
+	return handler.favoriteService.DeleteArticleFavorite(ctx, request)
+}

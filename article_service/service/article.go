@@ -170,7 +170,7 @@ func (service *ArticleService) findArticlesByTag(offset, limit int32, tag string
 }
 
 func (service *ArticleService) findArticlesByAuthor(offset, limit int32, userId string) ([]*model.Article, error) {
-	return service.articleStore.FindByAuthor(offset, limit, userId)
+	return service.articleStore.FindByAuthorId(offset, limit, userId)
 }
 
 func (service *ArticleService) findArticlesByFavoritedUsername(tag string, offset, limit int32) ([]*model.Article, error) {

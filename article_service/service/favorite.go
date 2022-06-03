@@ -41,15 +41,15 @@ func (service *FavoriteService) CreateArticleFavorite(ctx context.Context, reque
 		return nil, err
 	}
 
+	author, err := service.getProfileById(ctx, article.UserID.String())
+	if err != nil {
+		return nil, err
+	}
+
 	var tagList []string
 	for _, tag := range article.Tags {
 		tagList = append(tagList, tag.Name)
 	}
-
-	author, err := service.getProfileById(ctx, article.UserID.String())
-		if err != nil {
-			return nil, err
-		}
 
 	return &pb.SingleArticleResponse{
 		Article: &pb.Article{
@@ -62,6 +62,49 @@ func (service *FavoriteService) CreateArticleFavorite(ctx context.Context, reque
 			UpdatedAt: article.UpdatedAt.UTC().String(),
 			Favorited: true,
 			FavoritesCount: 1,
+			Author: &pb.Profile{
+				Username: author.Profile.Username,
+				Bio: author.Profile.Bio,
+				Image: author.Profile.Image,
+				Following: author.Profile.Following,
+			},
+		},
+	}, nil
+}
+
+func (service *FavoriteService) DeleteArticleFavorite(ctx context.Context, request *pb.DeleteArticleFavoriteRequest) (*pb.SingleArticleResponse, error) {
+	currentUserIdString := ctx.Value(interceptor.CurrentUserKey{}).(string)
+	favorite, err := service.favoriteStore.FindByUserIdAndSlug(currentUserIdString, request.Slug)
+	if err != nil {
+		return nil, err
+	}
+
+	err = service.favoriteStore.Delete(favorite)
+	if err != nil {
+		return nil, err
+	}
+
+	author, err := service.getProfileById(ctx, favorite.Article.UserID.String())
+	if err != nil {
+		return nil, err
+	}
+
+	var tagList []string
+	for _, tag := range favorite.Article.Tags {
+		tagList = append(tagList, tag.Name)
+	}
+
+	return &pb.SingleArticleResponse{
+		Article: &pb.Article{
+			Slug: favorite.Article.Slug,
+			Title: favorite.Article.Title,
+			Description: favorite.Article.Description,
+			Body: favorite.Article.Body,
+			TagList: tagList,
+			CreatedAt: favorite.Article.CreatedAt.UTC().String(),
+			UpdatedAt: favorite.Article.UpdatedAt.UTC().String(),
+			Favorited: false,
+			FavoritesCount: 0,
 			Author: &pb.Profile{
 				Username: author.Profile.Username,
 				Bio: author.Profile.Bio,
