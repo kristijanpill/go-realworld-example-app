@@ -28,7 +28,19 @@ func (store *ArticlePostgresStore) Create(article *model.Article) (*model.Articl
 
 func (store *ArticlePostgresStore) Find(offset, limit int32) ([]*model.Article, error) {
 	var articles []*model.Article
-	result := store.db.Limit(int(limit)).Offset(int(offset)).Order("created_at desc").Find(&articles)
+	result := store.db.Limit(int(limit)).Offset(int(offset)).Order("created_at desc").Preload("Tags").Find(&articles)
 
 	return articles, result.Error
+}
+
+func (store *ArticlePostgresStore) FindByTag(offset, limit int32, tag string) ([]*model.Article, error) {
+	var tagModel *model.Tag
+	store.db.Where("name = ?", tag).Find(&tagModel)
+	var articles []*model.Article
+	var err error
+	if tagModel != nil {
+		err = store.db.Model(tagModel).Preload("Tags").Association("Articles").Find(&articles)
+	}
+
+	return articles, err
 }

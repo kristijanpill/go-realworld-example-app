@@ -40,7 +40,7 @@ func (service *ArticleService) GetArticles(ctx context.Context, request *pb.GetA
 	var err error
 
 	if request.Tag != "" {
-		articles, err = service.findArticlesByTag(request.Tag, offset, limit)
+		articles, err = service.findArticlesByTag(offset, limit, request.Tag)
 	} else if request.Author != "" {
 		articles, err = service.findArticlesByAuthor(request.Author, offset, limit)
 	} else if request.Favorited != "" {
@@ -153,12 +153,12 @@ func (service *ArticleService) getProfileById(ctx context.Context, id string) (*
 		md := metadata.New(map[string]string{"Authorization": "Token " + ctx.Value(interceptor.TokenKey{}).(string)})
 		ctx = metadata.NewOutgoingContext(ctx, md)
 	}
-	
+
 	return service.profileServiceClient.GetProfileById(ctx, &pb.ProfileIdRequest{Id: id})
 }
 
-func (service *ArticleService) findArticlesByTag(tag string, offset, limit int32) ([]*model.Article, error) {
-	return nil, nil
+func (service *ArticleService) findArticlesByTag(offset, limit int32, tag string) ([]*model.Article, error) {
+	return service.articleStore.FindByTag(offset, limit, tag)
 }
 
 func (service *ArticleService) findArticlesByAuthor(tag string, offset, limit int32) ([]*model.Article, error) {
