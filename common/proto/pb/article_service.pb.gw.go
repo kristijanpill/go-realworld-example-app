@@ -33,17 +33,17 @@ var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
 var (
-	filter_ArticleSerice_GetArticlesFeed_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_ArticleService_GetArticlesFeed_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
-func request_ArticleSerice_GetArticlesFeed_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleSericeClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_GetArticlesFeed_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetArticlesFeedRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleSerice_GetArticlesFeed_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleService_GetArticlesFeed_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -52,14 +52,14 @@ func request_ArticleSerice_GetArticlesFeed_0(ctx context.Context, marshaler runt
 
 }
 
-func local_request_ArticleSerice_GetArticlesFeed_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleSericeServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_GetArticlesFeed_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetArticlesFeedRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleSerice_GetArticlesFeed_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleService_GetArticlesFeed_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -69,17 +69,17 @@ func local_request_ArticleSerice_GetArticlesFeed_0(ctx context.Context, marshale
 }
 
 var (
-	filter_ArticleSerice_GetArticles_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_ArticleService_GetArticles_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
-func request_ArticleSerice_GetArticles_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleSericeClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_GetArticles_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetArticlesRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleSerice_GetArticles_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleService_GetArticles_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -88,14 +88,14 @@ func request_ArticleSerice_GetArticles_0(ctx context.Context, marshaler runtime.
 
 }
 
-func local_request_ArticleSerice_GetArticles_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleSericeServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_GetArticles_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetArticlesRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleSerice_GetArticles_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleService_GetArticles_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -104,18 +104,15 @@ func local_request_ArticleSerice_GetArticles_0(ctx context.Context, marshaler ru
 
 }
 
-var (
-	filter_ArticleSerice_CreateArticle_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
-)
-
-func request_ArticleSerice_CreateArticle_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleSericeClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_CreateArticle_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq NewArticleRequest
 	var metadata runtime.ServerMetadata
 
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleSerice_CreateArticle_0); err != nil {
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -124,14 +121,15 @@ func request_ArticleSerice_CreateArticle_0(ctx context.Context, marshaler runtim
 
 }
 
-func local_request_ArticleSerice_CreateArticle_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleSericeServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_CreateArticle_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq NewArticleRequest
 	var metadata runtime.ServerMetadata
 
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleSerice_CreateArticle_0); err != nil {
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -140,7 +138,7 @@ func local_request_ArticleSerice_CreateArticle_0(ctx context.Context, marshaler 
 
 }
 
-func request_ArticleSerice_GetArticle_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleSericeClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_GetArticle_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetArticleRequest
 	var metadata runtime.ServerMetadata
 
@@ -166,7 +164,7 @@ func request_ArticleSerice_GetArticle_0(ctx context.Context, marshaler runtime.M
 
 }
 
-func local_request_ArticleSerice_GetArticle_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleSericeServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_GetArticle_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetArticleRequest
 	var metadata runtime.ServerMetadata
 
@@ -192,7 +190,7 @@ func local_request_ArticleSerice_GetArticle_0(ctx context.Context, marshaler run
 
 }
 
-func request_ArticleSerice_UpdateArticle_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleSericeClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_UpdateArticle_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UpdateArticleRequest
 	var metadata runtime.ServerMetadata
 
@@ -226,7 +224,7 @@ func request_ArticleSerice_UpdateArticle_0(ctx context.Context, marshaler runtim
 
 }
 
-func local_request_ArticleSerice_UpdateArticle_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleSericeServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_UpdateArticle_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UpdateArticleRequest
 	var metadata runtime.ServerMetadata
 
@@ -260,7 +258,7 @@ func local_request_ArticleSerice_UpdateArticle_0(ctx context.Context, marshaler 
 
 }
 
-func request_ArticleSerice_DeleteArticle_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleSericeClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_DeleteArticle_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq DeleteArticleRequest
 	var metadata runtime.ServerMetadata
 
@@ -286,7 +284,7 @@ func request_ArticleSerice_DeleteArticle_0(ctx context.Context, marshaler runtim
 
 }
 
-func local_request_ArticleSerice_DeleteArticle_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleSericeServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_DeleteArticle_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq DeleteArticleRequest
 	var metadata runtime.ServerMetadata
 
@@ -312,7 +310,7 @@ func local_request_ArticleSerice_DeleteArticle_0(ctx context.Context, marshaler 
 
 }
 
-func request_ArticleSerice_GetArticleComments_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleSericeClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_GetArticleComments_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetArticleCommentsRequest
 	var metadata runtime.ServerMetadata
 
@@ -338,7 +336,7 @@ func request_ArticleSerice_GetArticleComments_0(ctx context.Context, marshaler r
 
 }
 
-func local_request_ArticleSerice_GetArticleComments_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleSericeServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_GetArticleComments_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetArticleCommentsRequest
 	var metadata runtime.ServerMetadata
 
@@ -365,10 +363,10 @@ func local_request_ArticleSerice_GetArticleComments_0(ctx context.Context, marsh
 }
 
 var (
-	filter_ArticleSerice_CreateArticleComment_0 = &utilities.DoubleArray{Encoding: map[string]int{"slug": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_ArticleService_CreateArticleComment_0 = &utilities.DoubleArray{Encoding: map[string]int{"slug": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
-func request_ArticleSerice_CreateArticleComment_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleSericeClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_CreateArticleComment_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq NewCommentRequest
 	var metadata runtime.ServerMetadata
 
@@ -392,7 +390,7 @@ func request_ArticleSerice_CreateArticleComment_0(ctx context.Context, marshaler
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleSerice_CreateArticleComment_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleService_CreateArticleComment_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -401,7 +399,7 @@ func request_ArticleSerice_CreateArticleComment_0(ctx context.Context, marshaler
 
 }
 
-func local_request_ArticleSerice_CreateArticleComment_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleSericeServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_CreateArticleComment_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq NewCommentRequest
 	var metadata runtime.ServerMetadata
 
@@ -425,7 +423,7 @@ func local_request_ArticleSerice_CreateArticleComment_0(ctx context.Context, mar
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleSerice_CreateArticleComment_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ArticleService_CreateArticleComment_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -434,7 +432,7 @@ func local_request_ArticleSerice_CreateArticleComment_0(ctx context.Context, mar
 
 }
 
-func request_ArticleSerice_DeleteArticleComment_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleSericeClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_DeleteArticleComment_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq DeleteArticleCommentRequest
 	var metadata runtime.ServerMetadata
 
@@ -470,7 +468,7 @@ func request_ArticleSerice_DeleteArticleComment_0(ctx context.Context, marshaler
 
 }
 
-func local_request_ArticleSerice_DeleteArticleComment_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleSericeServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_DeleteArticleComment_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq DeleteArticleCommentRequest
 	var metadata runtime.ServerMetadata
 
@@ -506,7 +504,7 @@ func local_request_ArticleSerice_DeleteArticleComment_0(ctx context.Context, mar
 
 }
 
-func request_ArticleSerice_CreateArticleFavorite_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleSericeClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_CreateArticleFavorite_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq CreateArticleFavoriteRequest
 	var metadata runtime.ServerMetadata
 
@@ -540,7 +538,7 @@ func request_ArticleSerice_CreateArticleFavorite_0(ctx context.Context, marshale
 
 }
 
-func local_request_ArticleSerice_CreateArticleFavorite_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleSericeServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_CreateArticleFavorite_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq CreateArticleFavoriteRequest
 	var metadata runtime.ServerMetadata
 
@@ -574,7 +572,7 @@ func local_request_ArticleSerice_CreateArticleFavorite_0(ctx context.Context, ma
 
 }
 
-func request_ArticleSerice_DeleteArticleFavorite_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleSericeClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_DeleteArticleFavorite_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq DeleteArticleFavoriteRequest
 	var metadata runtime.ServerMetadata
 
@@ -600,7 +598,7 @@ func request_ArticleSerice_DeleteArticleFavorite_0(ctx context.Context, marshale
 
 }
 
-func local_request_ArticleSerice_DeleteArticleFavorite_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleSericeServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_DeleteArticleFavorite_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq DeleteArticleFavoriteRequest
 	var metadata runtime.ServerMetadata
 
@@ -626,7 +624,7 @@ func local_request_ArticleSerice_DeleteArticleFavorite_0(ctx context.Context, ma
 
 }
 
-func request_ArticleSerice_GetTags_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleSericeClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_ArticleService_GetTags_0(ctx context.Context, marshaler runtime.Marshaler, client ArticleServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq emptypb.Empty
 	var metadata runtime.ServerMetadata
 
@@ -635,7 +633,7 @@ func request_ArticleSerice_GetTags_0(ctx context.Context, marshaler runtime.Mars
 
 }
 
-func local_request_ArticleSerice_GetTags_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleSericeServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_ArticleService_GetTags_0(ctx context.Context, marshaler runtime.Marshaler, server ArticleServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq emptypb.Empty
 	var metadata runtime.ServerMetadata
 
@@ -644,25 +642,25 @@ func local_request_ArticleSerice_GetTags_0(ctx context.Context, marshaler runtim
 
 }
 
-// RegisterArticleSericeHandlerServer registers the http handlers for service ArticleSerice to "mux".
-// UnaryRPC     :call ArticleSericeServer directly.
+// RegisterArticleServiceHandlerServer registers the http handlers for service ArticleService to "mux".
+// UnaryRPC     :call ArticleServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterArticleSericeHandlerFromEndpoint instead.
-func RegisterArticleSericeHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ArticleSericeServer) error {
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterArticleServiceHandlerFromEndpoint instead.
+func RegisterArticleServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ArticleServiceServer) error {
 
-	mux.Handle("GET", pattern_ArticleSerice_GetArticlesFeed_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ArticleService_GetArticlesFeed_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleSerice/GetArticlesFeed", runtime.WithHTTPPathPattern("/api/articles/feed"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/GetArticlesFeed", runtime.WithHTTPPathPattern("/api/articles/feed"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ArticleSerice_GetArticlesFeed_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_GetArticlesFeed_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -670,23 +668,23 @@ func RegisterArticleSericeHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_ArticleSerice_GetArticlesFeed_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_GetArticlesFeed_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ArticleSerice_GetArticles_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ArticleService_GetArticles_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleSerice/GetArticles", runtime.WithHTTPPathPattern("/api/articles"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/GetArticles", runtime.WithHTTPPathPattern("/api/articles"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ArticleSerice_GetArticles_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_GetArticles_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -694,23 +692,23 @@ func RegisterArticleSericeHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_ArticleSerice_GetArticles_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_GetArticles_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_ArticleSerice_CreateArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ArticleService_CreateArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleSerice/CreateArticle", runtime.WithHTTPPathPattern("/api/articles"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/CreateArticle", runtime.WithHTTPPathPattern("/api/articles"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ArticleSerice_CreateArticle_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_CreateArticle_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -718,23 +716,23 @@ func RegisterArticleSericeHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_ArticleSerice_CreateArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_CreateArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ArticleSerice_GetArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ArticleService_GetArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleSerice/GetArticle", runtime.WithHTTPPathPattern("/api/articles/{slug}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/GetArticle", runtime.WithHTTPPathPattern("/api/articles/{slug}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ArticleSerice_GetArticle_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_GetArticle_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -742,23 +740,23 @@ func RegisterArticleSericeHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_ArticleSerice_GetArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_GetArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("PUT", pattern_ArticleSerice_UpdateArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("PUT", pattern_ArticleService_UpdateArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleSerice/UpdateArticle", runtime.WithHTTPPathPattern("/api/articles/{slug}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/UpdateArticle", runtime.WithHTTPPathPattern("/api/articles/{slug}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ArticleSerice_UpdateArticle_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_UpdateArticle_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -766,23 +764,23 @@ func RegisterArticleSericeHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_ArticleSerice_UpdateArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_UpdateArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_ArticleSerice_DeleteArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_ArticleService_DeleteArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleSerice/DeleteArticle", runtime.WithHTTPPathPattern("/api/articles/{slug}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/DeleteArticle", runtime.WithHTTPPathPattern("/api/articles/{slug}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ArticleSerice_DeleteArticle_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_DeleteArticle_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -790,23 +788,23 @@ func RegisterArticleSericeHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_ArticleSerice_DeleteArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_DeleteArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ArticleSerice_GetArticleComments_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ArticleService_GetArticleComments_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleSerice/GetArticleComments", runtime.WithHTTPPathPattern("/api/articles/{slug}/comments"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/GetArticleComments", runtime.WithHTTPPathPattern("/api/articles/{slug}/comments"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ArticleSerice_GetArticleComments_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_GetArticleComments_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -814,23 +812,23 @@ func RegisterArticleSericeHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_ArticleSerice_GetArticleComments_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_GetArticleComments_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_ArticleSerice_CreateArticleComment_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ArticleService_CreateArticleComment_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleSerice/CreateArticleComment", runtime.WithHTTPPathPattern("/api/articles/{slug}/comments"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/CreateArticleComment", runtime.WithHTTPPathPattern("/api/articles/{slug}/comments"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ArticleSerice_CreateArticleComment_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_CreateArticleComment_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -838,23 +836,23 @@ func RegisterArticleSericeHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_ArticleSerice_CreateArticleComment_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_CreateArticleComment_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_ArticleSerice_DeleteArticleComment_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_ArticleService_DeleteArticleComment_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleSerice/DeleteArticleComment", runtime.WithHTTPPathPattern("/api/articles/{slug}/comments/{id}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/DeleteArticleComment", runtime.WithHTTPPathPattern("/api/articles/{slug}/comments/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ArticleSerice_DeleteArticleComment_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_DeleteArticleComment_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -862,23 +860,23 @@ func RegisterArticleSericeHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_ArticleSerice_DeleteArticleComment_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_DeleteArticleComment_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_ArticleSerice_CreateArticleFavorite_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ArticleService_CreateArticleFavorite_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleSerice/CreateArticleFavorite", runtime.WithHTTPPathPattern("/api/articles/{slug}/favorite"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/CreateArticleFavorite", runtime.WithHTTPPathPattern("/api/articles/{slug}/favorite"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ArticleSerice_CreateArticleFavorite_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_CreateArticleFavorite_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -886,23 +884,23 @@ func RegisterArticleSericeHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_ArticleSerice_CreateArticleFavorite_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_CreateArticleFavorite_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_ArticleSerice_DeleteArticleFavorite_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_ArticleService_DeleteArticleFavorite_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleSerice/DeleteArticleFavorite", runtime.WithHTTPPathPattern("/api/articles/{slug}/favorite"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/DeleteArticleFavorite", runtime.WithHTTPPathPattern("/api/articles/{slug}/favorite"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ArticleSerice_DeleteArticleFavorite_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_DeleteArticleFavorite_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -910,23 +908,23 @@ func RegisterArticleSericeHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_ArticleSerice_DeleteArticleFavorite_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_DeleteArticleFavorite_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ArticleSerice_GetTags_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ArticleService_GetTags_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleSerice/GetTags", runtime.WithHTTPPathPattern("/api/tags"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/GetTags", runtime.WithHTTPPathPattern("/api/tags"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ArticleSerice_GetTags_0(ctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ArticleService_GetTags_0(ctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -934,16 +932,16 @@ func RegisterArticleSericeHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_ArticleSerice_GetTags_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_GetTags_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-// RegisterArticleSericeHandlerFromEndpoint is same as RegisterArticleSericeHandler but
+// RegisterArticleServiceHandlerFromEndpoint is same as RegisterArticleServiceHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterArticleSericeHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterArticleServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return err
@@ -963,271 +961,271 @@ func RegisterArticleSericeHandlerFromEndpoint(ctx context.Context, mux *runtime.
 		}()
 	}()
 
-	return RegisterArticleSericeHandler(ctx, mux, conn)
+	return RegisterArticleServiceHandler(ctx, mux, conn)
 }
 
-// RegisterArticleSericeHandler registers the http handlers for service ArticleSerice to "mux".
+// RegisterArticleServiceHandler registers the http handlers for service ArticleService to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterArticleSericeHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterArticleSericeHandlerClient(ctx, mux, NewArticleSericeClient(conn))
+func RegisterArticleServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterArticleServiceHandlerClient(ctx, mux, NewArticleServiceClient(conn))
 }
 
-// RegisterArticleSericeHandlerClient registers the http handlers for service ArticleSerice
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "ArticleSericeClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ArticleSericeClient"
+// RegisterArticleServiceHandlerClient registers the http handlers for service ArticleService
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "ArticleServiceClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ArticleServiceClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "ArticleSericeClient" to call the correct interceptors.
-func RegisterArticleSericeHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ArticleSericeClient) error {
+// "ArticleServiceClient" to call the correct interceptors.
+func RegisterArticleServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ArticleServiceClient) error {
 
-	mux.Handle("GET", pattern_ArticleSerice_GetArticlesFeed_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ArticleService_GetArticlesFeed_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleSerice/GetArticlesFeed", runtime.WithHTTPPathPattern("/api/articles/feed"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/GetArticlesFeed", runtime.WithHTTPPathPattern("/api/articles/feed"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ArticleSerice_GetArticlesFeed_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_GetArticlesFeed_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ArticleSerice_GetArticlesFeed_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_GetArticlesFeed_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ArticleSerice_GetArticles_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ArticleService_GetArticles_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleSerice/GetArticles", runtime.WithHTTPPathPattern("/api/articles"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/GetArticles", runtime.WithHTTPPathPattern("/api/articles"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ArticleSerice_GetArticles_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_GetArticles_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ArticleSerice_GetArticles_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_GetArticles_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_ArticleSerice_CreateArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ArticleService_CreateArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleSerice/CreateArticle", runtime.WithHTTPPathPattern("/api/articles"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/CreateArticle", runtime.WithHTTPPathPattern("/api/articles"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ArticleSerice_CreateArticle_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_CreateArticle_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ArticleSerice_CreateArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_CreateArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ArticleSerice_GetArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ArticleService_GetArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleSerice/GetArticle", runtime.WithHTTPPathPattern("/api/articles/{slug}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/GetArticle", runtime.WithHTTPPathPattern("/api/articles/{slug}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ArticleSerice_GetArticle_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_GetArticle_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ArticleSerice_GetArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_GetArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("PUT", pattern_ArticleSerice_UpdateArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("PUT", pattern_ArticleService_UpdateArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleSerice/UpdateArticle", runtime.WithHTTPPathPattern("/api/articles/{slug}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/UpdateArticle", runtime.WithHTTPPathPattern("/api/articles/{slug}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ArticleSerice_UpdateArticle_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_UpdateArticle_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ArticleSerice_UpdateArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_UpdateArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_ArticleSerice_DeleteArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_ArticleService_DeleteArticle_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleSerice/DeleteArticle", runtime.WithHTTPPathPattern("/api/articles/{slug}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/DeleteArticle", runtime.WithHTTPPathPattern("/api/articles/{slug}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ArticleSerice_DeleteArticle_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_DeleteArticle_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ArticleSerice_DeleteArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_DeleteArticle_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ArticleSerice_GetArticleComments_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ArticleService_GetArticleComments_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleSerice/GetArticleComments", runtime.WithHTTPPathPattern("/api/articles/{slug}/comments"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/GetArticleComments", runtime.WithHTTPPathPattern("/api/articles/{slug}/comments"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ArticleSerice_GetArticleComments_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_GetArticleComments_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ArticleSerice_GetArticleComments_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_GetArticleComments_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_ArticleSerice_CreateArticleComment_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ArticleService_CreateArticleComment_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleSerice/CreateArticleComment", runtime.WithHTTPPathPattern("/api/articles/{slug}/comments"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/CreateArticleComment", runtime.WithHTTPPathPattern("/api/articles/{slug}/comments"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ArticleSerice_CreateArticleComment_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_CreateArticleComment_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ArticleSerice_CreateArticleComment_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_CreateArticleComment_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_ArticleSerice_DeleteArticleComment_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_ArticleService_DeleteArticleComment_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleSerice/DeleteArticleComment", runtime.WithHTTPPathPattern("/api/articles/{slug}/comments/{id}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/DeleteArticleComment", runtime.WithHTTPPathPattern("/api/articles/{slug}/comments/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ArticleSerice_DeleteArticleComment_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_DeleteArticleComment_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ArticleSerice_DeleteArticleComment_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_DeleteArticleComment_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_ArticleSerice_CreateArticleFavorite_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ArticleService_CreateArticleFavorite_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleSerice/CreateArticleFavorite", runtime.WithHTTPPathPattern("/api/articles/{slug}/favorite"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/CreateArticleFavorite", runtime.WithHTTPPathPattern("/api/articles/{slug}/favorite"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ArticleSerice_CreateArticleFavorite_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_CreateArticleFavorite_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ArticleSerice_CreateArticleFavorite_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_CreateArticleFavorite_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_ArticleSerice_DeleteArticleFavorite_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_ArticleService_DeleteArticleFavorite_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleSerice/DeleteArticleFavorite", runtime.WithHTTPPathPattern("/api/articles/{slug}/favorite"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/DeleteArticleFavorite", runtime.WithHTTPPathPattern("/api/articles/{slug}/favorite"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ArticleSerice_DeleteArticleFavorite_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_DeleteArticleFavorite_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ArticleSerice_DeleteArticleFavorite_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_DeleteArticleFavorite_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ArticleSerice_GetTags_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_ArticleService_GetTags_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleSerice/GetTags", runtime.WithHTTPPathPattern("/api/tags"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/GetTags", runtime.WithHTTPPathPattern("/api/tags"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ArticleSerice_GetTags_0(ctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ArticleService_GetTags_0(ctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ArticleSerice_GetTags_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ArticleService_GetTags_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -1235,53 +1233,53 @@ func RegisterArticleSericeHandlerClient(ctx context.Context, mux *runtime.ServeM
 }
 
 var (
-	pattern_ArticleSerice_GetArticlesFeed_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "articles", "feed"}, ""))
+	pattern_ArticleService_GetArticlesFeed_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "articles", "feed"}, ""))
 
-	pattern_ArticleSerice_GetArticles_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "articles"}, ""))
+	pattern_ArticleService_GetArticles_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "articles"}, ""))
 
-	pattern_ArticleSerice_CreateArticle_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "articles"}, ""))
+	pattern_ArticleService_CreateArticle_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "articles"}, ""))
 
-	pattern_ArticleSerice_GetArticle_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "articles", "slug"}, ""))
+	pattern_ArticleService_GetArticle_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "articles", "slug"}, ""))
 
-	pattern_ArticleSerice_UpdateArticle_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "articles", "slug"}, ""))
+	pattern_ArticleService_UpdateArticle_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "articles", "slug"}, ""))
 
-	pattern_ArticleSerice_DeleteArticle_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "articles", "slug"}, ""))
+	pattern_ArticleService_DeleteArticle_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "articles", "slug"}, ""))
 
-	pattern_ArticleSerice_GetArticleComments_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"api", "articles", "slug", "comments"}, ""))
+	pattern_ArticleService_GetArticleComments_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"api", "articles", "slug", "comments"}, ""))
 
-	pattern_ArticleSerice_CreateArticleComment_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"api", "articles", "slug", "comments"}, ""))
+	pattern_ArticleService_CreateArticleComment_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"api", "articles", "slug", "comments"}, ""))
 
-	pattern_ArticleSerice_DeleteArticleComment_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "articles", "slug", "comments", "id"}, ""))
+	pattern_ArticleService_DeleteArticleComment_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "articles", "slug", "comments", "id"}, ""))
 
-	pattern_ArticleSerice_CreateArticleFavorite_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"api", "articles", "slug", "favorite"}, ""))
+	pattern_ArticleService_CreateArticleFavorite_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"api", "articles", "slug", "favorite"}, ""))
 
-	pattern_ArticleSerice_DeleteArticleFavorite_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"api", "articles", "slug", "favorite"}, ""))
+	pattern_ArticleService_DeleteArticleFavorite_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"api", "articles", "slug", "favorite"}, ""))
 
-	pattern_ArticleSerice_GetTags_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "tags"}, ""))
+	pattern_ArticleService_GetTags_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "tags"}, ""))
 )
 
 var (
-	forward_ArticleSerice_GetArticlesFeed_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_GetArticlesFeed_0 = runtime.ForwardResponseMessage
 
-	forward_ArticleSerice_GetArticles_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_GetArticles_0 = runtime.ForwardResponseMessage
 
-	forward_ArticleSerice_CreateArticle_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_CreateArticle_0 = runtime.ForwardResponseMessage
 
-	forward_ArticleSerice_GetArticle_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_GetArticle_0 = runtime.ForwardResponseMessage
 
-	forward_ArticleSerice_UpdateArticle_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_UpdateArticle_0 = runtime.ForwardResponseMessage
 
-	forward_ArticleSerice_DeleteArticle_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_DeleteArticle_0 = runtime.ForwardResponseMessage
 
-	forward_ArticleSerice_GetArticleComments_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_GetArticleComments_0 = runtime.ForwardResponseMessage
 
-	forward_ArticleSerice_CreateArticleComment_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_CreateArticleComment_0 = runtime.ForwardResponseMessage
 
-	forward_ArticleSerice_DeleteArticleComment_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_DeleteArticleComment_0 = runtime.ForwardResponseMessage
 
-	forward_ArticleSerice_CreateArticleFavorite_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_CreateArticleFavorite_0 = runtime.ForwardResponseMessage
 
-	forward_ArticleSerice_DeleteArticleFavorite_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_DeleteArticleFavorite_0 = runtime.ForwardResponseMessage
 
-	forward_ArticleSerice_GetTags_0 = runtime.ForwardResponseMessage
+	forward_ArticleService_GetTags_0 = runtime.ForwardResponseMessage
 )

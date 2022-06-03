@@ -43,6 +43,12 @@ func (server *Server) initGatewayHandlers() {
 	if err != nil {
 		log.Fatal("cannot register profile service handler: ", err)
 	}
+
+	articleServiceEndpoint := formatEndpoint(server.config.ArticleServiceHost, server.config.ArticleServicePort)
+	err = pb.RegisterArticleServiceHandlerFromEndpoint(context.Background(), server.mux, articleServiceEndpoint, dialOptions)
+	if err != nil {
+		log.Fatal("cannot register article service handler: ", err)
+	}
 }
 
 func (server *Server) Start() {

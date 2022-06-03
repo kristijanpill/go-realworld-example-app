@@ -19,10 +19,10 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// ArticleSericeClient is the client API for ArticleSerice service.
+// ArticleServiceClient is the client API for ArticleService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ArticleSericeClient interface {
+type ArticleServiceClient interface {
 	GetArticlesFeed(ctx context.Context, in *GetArticlesFeedRequest, opts ...grpc.CallOption) (*MultipleArticlesResponse, error)
 	GetArticles(ctx context.Context, in *GetArticlesRequest, opts ...grpc.CallOption) (*MultipleArticlesResponse, error)
 	CreateArticle(ctx context.Context, in *NewArticleRequest, opts ...grpc.CallOption) (*SingleArticleResponse, error)
@@ -37,126 +37,126 @@ type ArticleSericeClient interface {
 	GetTags(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*TagsResponse, error)
 }
 
-type articleSericeClient struct {
+type articleServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewArticleSericeClient(cc grpc.ClientConnInterface) ArticleSericeClient {
-	return &articleSericeClient{cc}
+func NewArticleServiceClient(cc grpc.ClientConnInterface) ArticleServiceClient {
+	return &articleServiceClient{cc}
 }
 
-func (c *articleSericeClient) GetArticlesFeed(ctx context.Context, in *GetArticlesFeedRequest, opts ...grpc.CallOption) (*MultipleArticlesResponse, error) {
+func (c *articleServiceClient) GetArticlesFeed(ctx context.Context, in *GetArticlesFeedRequest, opts ...grpc.CallOption) (*MultipleArticlesResponse, error) {
 	out := new(MultipleArticlesResponse)
-	err := c.cc.Invoke(ctx, "/article.ArticleSerice/GetArticlesFeed", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/GetArticlesFeed", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleSericeClient) GetArticles(ctx context.Context, in *GetArticlesRequest, opts ...grpc.CallOption) (*MultipleArticlesResponse, error) {
+func (c *articleServiceClient) GetArticles(ctx context.Context, in *GetArticlesRequest, opts ...grpc.CallOption) (*MultipleArticlesResponse, error) {
 	out := new(MultipleArticlesResponse)
-	err := c.cc.Invoke(ctx, "/article.ArticleSerice/GetArticles", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/GetArticles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleSericeClient) CreateArticle(ctx context.Context, in *NewArticleRequest, opts ...grpc.CallOption) (*SingleArticleResponse, error) {
+func (c *articleServiceClient) CreateArticle(ctx context.Context, in *NewArticleRequest, opts ...grpc.CallOption) (*SingleArticleResponse, error) {
 	out := new(SingleArticleResponse)
-	err := c.cc.Invoke(ctx, "/article.ArticleSerice/CreateArticle", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/CreateArticle", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleSericeClient) GetArticle(ctx context.Context, in *GetArticleRequest, opts ...grpc.CallOption) (*SingleArticleResponse, error) {
+func (c *articleServiceClient) GetArticle(ctx context.Context, in *GetArticleRequest, opts ...grpc.CallOption) (*SingleArticleResponse, error) {
 	out := new(SingleArticleResponse)
-	err := c.cc.Invoke(ctx, "/article.ArticleSerice/GetArticle", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/GetArticle", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleSericeClient) UpdateArticle(ctx context.Context, in *UpdateArticleRequest, opts ...grpc.CallOption) (*SingleArticleResponse, error) {
+func (c *articleServiceClient) UpdateArticle(ctx context.Context, in *UpdateArticleRequest, opts ...grpc.CallOption) (*SingleArticleResponse, error) {
 	out := new(SingleArticleResponse)
-	err := c.cc.Invoke(ctx, "/article.ArticleSerice/UpdateArticle", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/UpdateArticle", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleSericeClient) DeleteArticle(ctx context.Context, in *DeleteArticleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *articleServiceClient) DeleteArticle(ctx context.Context, in *DeleteArticleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/article.ArticleSerice/DeleteArticle", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/DeleteArticle", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleSericeClient) GetArticleComments(ctx context.Context, in *GetArticleCommentsRequest, opts ...grpc.CallOption) (*MultipleCommentsResponse, error) {
+func (c *articleServiceClient) GetArticleComments(ctx context.Context, in *GetArticleCommentsRequest, opts ...grpc.CallOption) (*MultipleCommentsResponse, error) {
 	out := new(MultipleCommentsResponse)
-	err := c.cc.Invoke(ctx, "/article.ArticleSerice/GetArticleComments", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/GetArticleComments", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleSericeClient) CreateArticleComment(ctx context.Context, in *NewCommentRequest, opts ...grpc.CallOption) (*SingleCommentResponse, error) {
+func (c *articleServiceClient) CreateArticleComment(ctx context.Context, in *NewCommentRequest, opts ...grpc.CallOption) (*SingleCommentResponse, error) {
 	out := new(SingleCommentResponse)
-	err := c.cc.Invoke(ctx, "/article.ArticleSerice/CreateArticleComment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/CreateArticleComment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleSericeClient) DeleteArticleComment(ctx context.Context, in *DeleteArticleCommentRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *articleServiceClient) DeleteArticleComment(ctx context.Context, in *DeleteArticleCommentRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/article.ArticleSerice/DeleteArticleComment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/DeleteArticleComment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleSericeClient) CreateArticleFavorite(ctx context.Context, in *CreateArticleFavoriteRequest, opts ...grpc.CallOption) (*SingleArticleResponse, error) {
+func (c *articleServiceClient) CreateArticleFavorite(ctx context.Context, in *CreateArticleFavoriteRequest, opts ...grpc.CallOption) (*SingleArticleResponse, error) {
 	out := new(SingleArticleResponse)
-	err := c.cc.Invoke(ctx, "/article.ArticleSerice/CreateArticleFavorite", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/CreateArticleFavorite", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleSericeClient) DeleteArticleFavorite(ctx context.Context, in *DeleteArticleFavoriteRequest, opts ...grpc.CallOption) (*SingleArticleResponse, error) {
+func (c *articleServiceClient) DeleteArticleFavorite(ctx context.Context, in *DeleteArticleFavoriteRequest, opts ...grpc.CallOption) (*SingleArticleResponse, error) {
 	out := new(SingleArticleResponse)
-	err := c.cc.Invoke(ctx, "/article.ArticleSerice/DeleteArticleFavorite", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/DeleteArticleFavorite", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *articleSericeClient) GetTags(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*TagsResponse, error) {
+func (c *articleServiceClient) GetTags(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*TagsResponse, error) {
 	out := new(TagsResponse)
-	err := c.cc.Invoke(ctx, "/article.ArticleSerice/GetTags", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/GetTags", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ArticleSericeServer is the server API for ArticleSerice service.
-// All implementations must embed UnimplementedArticleSericeServer
+// ArticleServiceServer is the server API for ArticleService service.
+// All implementations must embed UnimplementedArticleServiceServer
 // for forward compatibility
-type ArticleSericeServer interface {
+type ArticleServiceServer interface {
 	GetArticlesFeed(context.Context, *GetArticlesFeedRequest) (*MultipleArticlesResponse, error)
 	GetArticles(context.Context, *GetArticlesRequest) (*MultipleArticlesResponse, error)
 	CreateArticle(context.Context, *NewArticleRequest) (*SingleArticleResponse, error)
@@ -169,332 +169,332 @@ type ArticleSericeServer interface {
 	CreateArticleFavorite(context.Context, *CreateArticleFavoriteRequest) (*SingleArticleResponse, error)
 	DeleteArticleFavorite(context.Context, *DeleteArticleFavoriteRequest) (*SingleArticleResponse, error)
 	GetTags(context.Context, *emptypb.Empty) (*TagsResponse, error)
-	mustEmbedUnimplementedArticleSericeServer()
+	mustEmbedUnimplementedArticleServiceServer()
 }
 
-// UnimplementedArticleSericeServer must be embedded to have forward compatible implementations.
-type UnimplementedArticleSericeServer struct {
+// UnimplementedArticleServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedArticleServiceServer struct {
 }
 
-func (UnimplementedArticleSericeServer) GetArticlesFeed(context.Context, *GetArticlesFeedRequest) (*MultipleArticlesResponse, error) {
+func (UnimplementedArticleServiceServer) GetArticlesFeed(context.Context, *GetArticlesFeedRequest) (*MultipleArticlesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetArticlesFeed not implemented")
 }
-func (UnimplementedArticleSericeServer) GetArticles(context.Context, *GetArticlesRequest) (*MultipleArticlesResponse, error) {
+func (UnimplementedArticleServiceServer) GetArticles(context.Context, *GetArticlesRequest) (*MultipleArticlesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetArticles not implemented")
 }
-func (UnimplementedArticleSericeServer) CreateArticle(context.Context, *NewArticleRequest) (*SingleArticleResponse, error) {
+func (UnimplementedArticleServiceServer) CreateArticle(context.Context, *NewArticleRequest) (*SingleArticleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateArticle not implemented")
 }
-func (UnimplementedArticleSericeServer) GetArticle(context.Context, *GetArticleRequest) (*SingleArticleResponse, error) {
+func (UnimplementedArticleServiceServer) GetArticle(context.Context, *GetArticleRequest) (*SingleArticleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetArticle not implemented")
 }
-func (UnimplementedArticleSericeServer) UpdateArticle(context.Context, *UpdateArticleRequest) (*SingleArticleResponse, error) {
+func (UnimplementedArticleServiceServer) UpdateArticle(context.Context, *UpdateArticleRequest) (*SingleArticleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateArticle not implemented")
 }
-func (UnimplementedArticleSericeServer) DeleteArticle(context.Context, *DeleteArticleRequest) (*emptypb.Empty, error) {
+func (UnimplementedArticleServiceServer) DeleteArticle(context.Context, *DeleteArticleRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteArticle not implemented")
 }
-func (UnimplementedArticleSericeServer) GetArticleComments(context.Context, *GetArticleCommentsRequest) (*MultipleCommentsResponse, error) {
+func (UnimplementedArticleServiceServer) GetArticleComments(context.Context, *GetArticleCommentsRequest) (*MultipleCommentsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetArticleComments not implemented")
 }
-func (UnimplementedArticleSericeServer) CreateArticleComment(context.Context, *NewCommentRequest) (*SingleCommentResponse, error) {
+func (UnimplementedArticleServiceServer) CreateArticleComment(context.Context, *NewCommentRequest) (*SingleCommentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateArticleComment not implemented")
 }
-func (UnimplementedArticleSericeServer) DeleteArticleComment(context.Context, *DeleteArticleCommentRequest) (*emptypb.Empty, error) {
+func (UnimplementedArticleServiceServer) DeleteArticleComment(context.Context, *DeleteArticleCommentRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteArticleComment not implemented")
 }
-func (UnimplementedArticleSericeServer) CreateArticleFavorite(context.Context, *CreateArticleFavoriteRequest) (*SingleArticleResponse, error) {
+func (UnimplementedArticleServiceServer) CreateArticleFavorite(context.Context, *CreateArticleFavoriteRequest) (*SingleArticleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateArticleFavorite not implemented")
 }
-func (UnimplementedArticleSericeServer) DeleteArticleFavorite(context.Context, *DeleteArticleFavoriteRequest) (*SingleArticleResponse, error) {
+func (UnimplementedArticleServiceServer) DeleteArticleFavorite(context.Context, *DeleteArticleFavoriteRequest) (*SingleArticleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteArticleFavorite not implemented")
 }
-func (UnimplementedArticleSericeServer) GetTags(context.Context, *emptypb.Empty) (*TagsResponse, error) {
+func (UnimplementedArticleServiceServer) GetTags(context.Context, *emptypb.Empty) (*TagsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTags not implemented")
 }
-func (UnimplementedArticleSericeServer) mustEmbedUnimplementedArticleSericeServer() {}
+func (UnimplementedArticleServiceServer) mustEmbedUnimplementedArticleServiceServer() {}
 
-// UnsafeArticleSericeServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ArticleSericeServer will
+// UnsafeArticleServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ArticleServiceServer will
 // result in compilation errors.
-type UnsafeArticleSericeServer interface {
-	mustEmbedUnimplementedArticleSericeServer()
+type UnsafeArticleServiceServer interface {
+	mustEmbedUnimplementedArticleServiceServer()
 }
 
-func RegisterArticleSericeServer(s grpc.ServiceRegistrar, srv ArticleSericeServer) {
-	s.RegisterService(&ArticleSerice_ServiceDesc, srv)
+func RegisterArticleServiceServer(s grpc.ServiceRegistrar, srv ArticleServiceServer) {
+	s.RegisterService(&ArticleService_ServiceDesc, srv)
 }
 
-func _ArticleSerice_GetArticlesFeed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ArticleService_GetArticlesFeed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetArticlesFeedRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleSericeServer).GetArticlesFeed(ctx, in)
+		return srv.(ArticleServiceServer).GetArticlesFeed(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article.ArticleSerice/GetArticlesFeed",
+		FullMethod: "/article.ArticleService/GetArticlesFeed",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleSericeServer).GetArticlesFeed(ctx, req.(*GetArticlesFeedRequest))
+		return srv.(ArticleServiceServer).GetArticlesFeed(ctx, req.(*GetArticlesFeedRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleSerice_GetArticles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ArticleService_GetArticles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetArticlesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleSericeServer).GetArticles(ctx, in)
+		return srv.(ArticleServiceServer).GetArticles(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article.ArticleSerice/GetArticles",
+		FullMethod: "/article.ArticleService/GetArticles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleSericeServer).GetArticles(ctx, req.(*GetArticlesRequest))
+		return srv.(ArticleServiceServer).GetArticles(ctx, req.(*GetArticlesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleSerice_CreateArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ArticleService_CreateArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(NewArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleSericeServer).CreateArticle(ctx, in)
+		return srv.(ArticleServiceServer).CreateArticle(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article.ArticleSerice/CreateArticle",
+		FullMethod: "/article.ArticleService/CreateArticle",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleSericeServer).CreateArticle(ctx, req.(*NewArticleRequest))
+		return srv.(ArticleServiceServer).CreateArticle(ctx, req.(*NewArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleSerice_GetArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ArticleService_GetArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleSericeServer).GetArticle(ctx, in)
+		return srv.(ArticleServiceServer).GetArticle(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article.ArticleSerice/GetArticle",
+		FullMethod: "/article.ArticleService/GetArticle",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleSericeServer).GetArticle(ctx, req.(*GetArticleRequest))
+		return srv.(ArticleServiceServer).GetArticle(ctx, req.(*GetArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleSerice_UpdateArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ArticleService_UpdateArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleSericeServer).UpdateArticle(ctx, in)
+		return srv.(ArticleServiceServer).UpdateArticle(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article.ArticleSerice/UpdateArticle",
+		FullMethod: "/article.ArticleService/UpdateArticle",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleSericeServer).UpdateArticle(ctx, req.(*UpdateArticleRequest))
+		return srv.(ArticleServiceServer).UpdateArticle(ctx, req.(*UpdateArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleSerice_DeleteArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ArticleService_DeleteArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteArticleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleSericeServer).DeleteArticle(ctx, in)
+		return srv.(ArticleServiceServer).DeleteArticle(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article.ArticleSerice/DeleteArticle",
+		FullMethod: "/article.ArticleService/DeleteArticle",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleSericeServer).DeleteArticle(ctx, req.(*DeleteArticleRequest))
+		return srv.(ArticleServiceServer).DeleteArticle(ctx, req.(*DeleteArticleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleSerice_GetArticleComments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ArticleService_GetArticleComments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetArticleCommentsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleSericeServer).GetArticleComments(ctx, in)
+		return srv.(ArticleServiceServer).GetArticleComments(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article.ArticleSerice/GetArticleComments",
+		FullMethod: "/article.ArticleService/GetArticleComments",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleSericeServer).GetArticleComments(ctx, req.(*GetArticleCommentsRequest))
+		return srv.(ArticleServiceServer).GetArticleComments(ctx, req.(*GetArticleCommentsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleSerice_CreateArticleComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ArticleService_CreateArticleComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(NewCommentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleSericeServer).CreateArticleComment(ctx, in)
+		return srv.(ArticleServiceServer).CreateArticleComment(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article.ArticleSerice/CreateArticleComment",
+		FullMethod: "/article.ArticleService/CreateArticleComment",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleSericeServer).CreateArticleComment(ctx, req.(*NewCommentRequest))
+		return srv.(ArticleServiceServer).CreateArticleComment(ctx, req.(*NewCommentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleSerice_DeleteArticleComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ArticleService_DeleteArticleComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteArticleCommentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleSericeServer).DeleteArticleComment(ctx, in)
+		return srv.(ArticleServiceServer).DeleteArticleComment(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article.ArticleSerice/DeleteArticleComment",
+		FullMethod: "/article.ArticleService/DeleteArticleComment",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleSericeServer).DeleteArticleComment(ctx, req.(*DeleteArticleCommentRequest))
+		return srv.(ArticleServiceServer).DeleteArticleComment(ctx, req.(*DeleteArticleCommentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleSerice_CreateArticleFavorite_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ArticleService_CreateArticleFavorite_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateArticleFavoriteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleSericeServer).CreateArticleFavorite(ctx, in)
+		return srv.(ArticleServiceServer).CreateArticleFavorite(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article.ArticleSerice/CreateArticleFavorite",
+		FullMethod: "/article.ArticleService/CreateArticleFavorite",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleSericeServer).CreateArticleFavorite(ctx, req.(*CreateArticleFavoriteRequest))
+		return srv.(ArticleServiceServer).CreateArticleFavorite(ctx, req.(*CreateArticleFavoriteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleSerice_DeleteArticleFavorite_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ArticleService_DeleteArticleFavorite_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteArticleFavoriteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleSericeServer).DeleteArticleFavorite(ctx, in)
+		return srv.(ArticleServiceServer).DeleteArticleFavorite(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article.ArticleSerice/DeleteArticleFavorite",
+		FullMethod: "/article.ArticleService/DeleteArticleFavorite",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleSericeServer).DeleteArticleFavorite(ctx, req.(*DeleteArticleFavoriteRequest))
+		return srv.(ArticleServiceServer).DeleteArticleFavorite(ctx, req.(*DeleteArticleFavoriteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ArticleSerice_GetTags_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ArticleService_GetTags_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleSericeServer).GetTags(ctx, in)
+		return srv.(ArticleServiceServer).GetTags(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/article.ArticleSerice/GetTags",
+		FullMethod: "/article.ArticleService/GetTags",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleSericeServer).GetTags(ctx, req.(*emptypb.Empty))
+		return srv.(ArticleServiceServer).GetTags(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// ArticleSerice_ServiceDesc is the grpc.ServiceDesc for ArticleSerice service.
+// ArticleService_ServiceDesc is the grpc.ServiceDesc for ArticleService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var ArticleSerice_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "article.ArticleSerice",
-	HandlerType: (*ArticleSericeServer)(nil),
+var ArticleService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "article.ArticleService",
+	HandlerType: (*ArticleServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetArticlesFeed",
-			Handler:    _ArticleSerice_GetArticlesFeed_Handler,
+			Handler:    _ArticleService_GetArticlesFeed_Handler,
 		},
 		{
 			MethodName: "GetArticles",
-			Handler:    _ArticleSerice_GetArticles_Handler,
+			Handler:    _ArticleService_GetArticles_Handler,
 		},
 		{
 			MethodName: "CreateArticle",
-			Handler:    _ArticleSerice_CreateArticle_Handler,
+			Handler:    _ArticleService_CreateArticle_Handler,
 		},
 		{
 			MethodName: "GetArticle",
-			Handler:    _ArticleSerice_GetArticle_Handler,
+			Handler:    _ArticleService_GetArticle_Handler,
 		},
 		{
 			MethodName: "UpdateArticle",
-			Handler:    _ArticleSerice_UpdateArticle_Handler,
+			Handler:    _ArticleService_UpdateArticle_Handler,
 		},
 		{
 			MethodName: "DeleteArticle",
-			Handler:    _ArticleSerice_DeleteArticle_Handler,
+			Handler:    _ArticleService_DeleteArticle_Handler,
 		},
 		{
 			MethodName: "GetArticleComments",
-			Handler:    _ArticleSerice_GetArticleComments_Handler,
+			Handler:    _ArticleService_GetArticleComments_Handler,
 		},
 		{
 			MethodName: "CreateArticleComment",
-			Handler:    _ArticleSerice_CreateArticleComment_Handler,
+			Handler:    _ArticleService_CreateArticleComment_Handler,
 		},
 		{
 			MethodName: "DeleteArticleComment",
-			Handler:    _ArticleSerice_DeleteArticleComment_Handler,
+			Handler:    _ArticleService_DeleteArticleComment_Handler,
 		},
 		{
 			MethodName: "CreateArticleFavorite",
-			Handler:    _ArticleSerice_CreateArticleFavorite_Handler,
+			Handler:    _ArticleService_CreateArticleFavorite_Handler,
 		},
 		{
 			MethodName: "DeleteArticleFavorite",
-			Handler:    _ArticleSerice_DeleteArticleFavorite_Handler,
+			Handler:    _ArticleService_DeleteArticleFavorite_Handler,
 		},
 		{
 			MethodName: "GetTags",
-			Handler:    _ArticleSerice_GetTags_Handler,
+			Handler:    _ArticleService_GetTags_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

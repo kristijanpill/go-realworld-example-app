@@ -119,7 +119,7 @@ message DeleteArticleFavoriteRequest {
   string slug = 1;
 }
 
-service ArticleSerice {
+service ArticleService {
   rpc GetArticlesFeed(GetArticlesFeedRequest) returns (MultipleArticlesResponse) {
     option (google.api.http) = {
       get: "/api/articles/feed"
@@ -133,6 +133,7 @@ service ArticleSerice {
   rpc CreateArticle(NewArticleRequest) returns (SingleArticleResponse) {
     option (google.api.http) = {
       post: "/api/articles"
+      body: "*"
     };
   }
   rpc GetArticle(GetArticleRequest) returns (SingleArticleResponse) {
