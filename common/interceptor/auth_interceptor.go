@@ -53,7 +53,7 @@ func (interceptor *AuthInterceptor) authorize(ctx context.Context, method string
 	}
 
 	claims, err := interceptor.verifyToken(token)
-	if err != nil {
+	if err != nil && isAuthRequired {
 		return ctx, status.Errorf(codes.Unauthenticated, "unauthorized")
 	}
 

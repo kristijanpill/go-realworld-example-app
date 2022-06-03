@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"log"
 
 	"github.com/kristijanpill/go-realworld-example-app/article_service/service"
 	"github.com/kristijanpill/go-realworld-example-app/common/proto/pb"
@@ -21,9 +20,10 @@ func NewArticleHandler(articleService *service.ArticleService, tagService *servi
 	}
 }
 
+func (handler* ArticleHandler) GetArticles(ctx context.Context, request *pb.GetArticlesRequest) (*pb.MultipleArticlesResponse, error) {
+	return handler.articleService.GetArticles(ctx, request);
+}
+
 func (handler *ArticleHandler) CreateArticle(ctx context.Context, request *pb.NewArticleRequest) (*pb.SingleArticleResponse, error) {
-	log.Println("ARTICLE HANDLER")
-	log.Println(request)
-	log.Println(request.Article)
 	return handler.articleService.CreateArticle(ctx, request);
 }

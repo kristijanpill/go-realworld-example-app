@@ -4,4 +4,5 @@ import "github.com/kristijanpill/go-realworld-example-app/article_service/model"
 
 type ArticleStore interface {
 	Create(*model.Article) (*model.Article, error)
+	Find(offset, limit int32) ([]*model.Article, error)
 }

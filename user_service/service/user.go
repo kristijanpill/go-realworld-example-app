@@ -88,9 +88,9 @@ func (service *UserService) Login(request *pb.LoginUserRequest) (*pb.UserRespons
 		User: &pb.User{
 			Email: user.Email,
 			Token: token,
-			Username: profile.Username,
-			Bio: profile.Bio,
-			Image: profile.Image,
+			Username: profile.Profile.Username,
+			Bio: profile.Profile.Bio,
+			Image: profile.Profile.Image,
 		},
 	}, nil
 }
@@ -113,9 +113,9 @@ func (service *UserService) GetCurrentUser(ctx context.Context) (*pb.UserRespons
 	return &pb.UserResponse{User: &pb.User{
 		Email: user.Email,
 		Token: token,
-		Username: profile.Username,
-		Bio: profile.Bio,
-		Image: profile.Image,
+		Username: profile.Profile.Username,
+		Bio: profile.Profile.Bio,
+		Image: profile.Profile.Image,
 	}}, nil
 }
 
@@ -150,7 +150,7 @@ func (service *UserService) UpdateCurrentUser(ctx context.Context, request *pb.U
 	}, nil
 }
 
-func (service *UserService) getProfile(id uuid.UUID) (*pb.ProfileInfo, error) {
+func (service *UserService) getProfile(id uuid.UUID) (*pb.ProfileResponse, error) {
 	return service.profileServiceClient.GetProfileById(context.Background(), &pb.ProfileIdRequest{Id: id.String()})
 }
 

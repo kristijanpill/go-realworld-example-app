@@ -66,7 +66,7 @@ service ProfileService {
       delete: "/api/profiles/{username}/follow"
     };
   }
-  rpc GetProfileById(ProfileIdRequest) returns (ProfileInfo) {}
+  rpc GetProfileById(ProfileIdRequest) returns (ProfileResponse) {}
   rpc CreateProfile(CreateProfileRequest) returns (ProfileInfo) {}
   rpc UpdateProfile(UpdateProfileRequest) returns (ProfileInfo) {}
 }

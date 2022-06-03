@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 
-	"github.com/kristijanpill/go-realworld-example-app/common/interceptor"
 	"github.com/kristijanpill/go-realworld-example-app/common/proto/pb"
 	"github.com/kristijanpill/go-realworld-example-app/profile_service/service"
 )
@@ -22,17 +21,7 @@ func NewProfileHandler(profileService *service.ProfileService, followService *se
 }
 
 func (handler *ProfileHandler) GetProfileByUsername(ctx context.Context, request *pb.ProfileUsernameRequest) (*pb.ProfileResponse, error) {
-	profile, err := handler.profileService.GetProfileByUsername(request)
-	if err != nil {
-		return nil, err
-	}
-
-	following := false
-	if(ctx.Value(interceptor.CurrentUserKey{}) != nil) {
-		following = handler.followService.ExistsByProfileIdAndTargetId(ctx.Value(interceptor.CurrentUserKey{}).(string), profile.ID.String())
-	}
-
-	return profile.ProfileResponse(following), nil
+	return handler.profileService.GetProfileByUsername(ctx, request)
 }
 
 func (handler *ProfileHandler) FollowUserByUsername(ctx context.Context, request *pb.FollowRequest) (*pb.ProfileResponse, error) {
@@ -43,8 +32,8 @@ func (handler *ProfileHandler) UnfollowUserByUsername(ctx context.Context, reque
 	return handler.followService.UnfollowUserByUsername(ctx, request)
 }
 
-func (handler *ProfileHandler) GetProfileById(ctx context.Context, request *pb.ProfileIdRequest) (*pb.ProfileInfo, error) {
-	return handler.profileService.GetProfileById(request)
+func (handler *ProfileHandler) GetProfileById(ctx context.Context, request *pb.ProfileIdRequest) (*pb.ProfileResponse, error) {
+	return handler.profileService.GetProfileById(ctx, request)
 }
 
 func(handler *ProfileHandler) CreateProfile(ctx context.Context, request *pb.CreateProfileRequest) (*pb.ProfileInfo, error) {

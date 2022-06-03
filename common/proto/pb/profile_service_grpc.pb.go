@@ -25,7 +25,7 @@ type ProfileServiceClient interface {
 	GetProfileByUsername(ctx context.Context, in *ProfileUsernameRequest, opts ...grpc.CallOption) (*ProfileResponse, error)
 	FollowUserByUsername(ctx context.Context, in *FollowRequest, opts ...grpc.CallOption) (*ProfileResponse, error)
 	UnfollowUserByUsername(ctx context.Context, in *UnfollowRequest, opts ...grpc.CallOption) (*ProfileResponse, error)
-	GetProfileById(ctx context.Context, in *ProfileIdRequest, opts ...grpc.CallOption) (*ProfileInfo, error)
+	GetProfileById(ctx context.Context, in *ProfileIdRequest, opts ...grpc.CallOption) (*ProfileResponse, error)
 	CreateProfile(ctx context.Context, in *CreateProfileRequest, opts ...grpc.CallOption) (*ProfileInfo, error)
 	UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*ProfileInfo, error)
 }
@@ -65,8 +65,8 @@ func (c *profileServiceClient) UnfollowUserByUsername(ctx context.Context, in *U
 	return out, nil
 }
 
-func (c *profileServiceClient) GetProfileById(ctx context.Context, in *ProfileIdRequest, opts ...grpc.CallOption) (*ProfileInfo, error) {
-	out := new(ProfileInfo)
+func (c *profileServiceClient) GetProfileById(ctx context.Context, in *ProfileIdRequest, opts ...grpc.CallOption) (*ProfileResponse, error) {
+	out := new(ProfileResponse)
 	err := c.cc.Invoke(ctx, "/profile.ProfileService/GetProfileById", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -99,7 +99,7 @@ type ProfileServiceServer interface {
 	GetProfileByUsername(context.Context, *ProfileUsernameRequest) (*ProfileResponse, error)
 	FollowUserByUsername(context.Context, *FollowRequest) (*ProfileResponse, error)
 	UnfollowUserByUsername(context.Context, *UnfollowRequest) (*ProfileResponse, error)
-	GetProfileById(context.Context, *ProfileIdRequest) (*ProfileInfo, error)
+	GetProfileById(context.Context, *ProfileIdRequest) (*ProfileResponse, error)
 	CreateProfile(context.Context, *CreateProfileRequest) (*ProfileInfo, error)
 	UpdateProfile(context.Context, *UpdateProfileRequest) (*ProfileInfo, error)
 	mustEmbedUnimplementedProfileServiceServer()
@@ -118,7 +118,7 @@ func (UnimplementedProfileServiceServer) FollowUserByUsername(context.Context, *
 func (UnimplementedProfileServiceServer) UnfollowUserByUsername(context.Context, *UnfollowRequest) (*ProfileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UnfollowUserByUsername not implemented")
 }
-func (UnimplementedProfileServiceServer) GetProfileById(context.Context, *ProfileIdRequest) (*ProfileInfo, error) {
+func (UnimplementedProfileServiceServer) GetProfileById(context.Context, *ProfileIdRequest) (*ProfileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProfileById not implemented")
 }
 func (UnimplementedProfileServiceServer) CreateProfile(context.Context, *CreateProfileRequest) (*ProfileInfo, error) {

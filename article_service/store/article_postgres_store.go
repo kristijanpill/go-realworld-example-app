@@ -25,3 +25,10 @@ func (store *ArticlePostgresStore) Create(article *model.Article) (*model.Articl
 
 	return article, result.Error
 }
+
+func (store *ArticlePostgresStore) Find(offset, limit int32) ([]*model.Article, error) {
+	var articles []*model.Article
+	result := store.db.Limit(int(limit)).Offset(int(offset)).Order("created_at desc").Find(&articles)
+
+	return articles, result.Error
+}
