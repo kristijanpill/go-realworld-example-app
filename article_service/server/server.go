@@ -39,7 +39,7 @@ func (server *Server) Start() {
 	tagStore := server.initTagPostgresStore(db)
 	favoriteStore := server.initFavoritePostgresStore(db)
 	profileServiceClient := server.initProfileServiceClient()
-	articleService := service.NewArticleService(articleStore, tagStore, profileServiceClient)
+	articleService := service.NewArticleService(articleStore, tagStore, favoriteStore, profileServiceClient)
 	tagService := service.NewTagService(tagStore)
 	favoriteService := service.NewFavoriteService(favoriteStore, articleStore, profileServiceClient)
 	articleHandler := handler.NewArticleHandler(articleService, tagService, favoriteService)

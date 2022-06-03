@@ -38,3 +38,9 @@ func (store *FavoritePostgresStore) Delete(favorite *model.Favorite) error {
 
 	return result.Error
 }
+
+func (store *FavoritePostgresStore) IsArticleFavoritedByUserId(slug, userId string) bool {
+	var favorite model.Favorite
+	
+	return store.db.Where("user_id = ? AND article_id = ?", slug, userId).First(&favorite).RowsAffected == 1
+}

@@ -58,3 +58,11 @@ func (store *ArticlePostgresStore) FindByAuthorId(offset, limit int32, userId st
 
 	return articles, result.Error
 }
+
+func (store *ArticlePostgresStore) FindFavoritedByUserId(offset, limit int32, userId string) ([]*model.Article, error) {
+	var articles []*model.Article
+	result := store.db.Joins("JOIN favorites ON favorites.article_id = articles.slug").Where("favorites.user_id = ?", userId).Limit(int(limit)).Offset(int(offset)).Order("created_at desc").Find(&articles)
+
+	return articles, result.Error
+}
+

@@ -15,13 +15,15 @@ import (
 type ArticleService struct {
 	articleStore store.ArticleStore
 	tagStore store.TagStore
+	favoriteStore store.FavoriteStore
 	profileServiceClient pb.ProfileServiceClient
 }
 
-func NewArticleService(articleStore store.ArticleStore, tagStore store.TagStore, profileServiceClient pb.ProfileServiceClient) *ArticleService {
+func NewArticleService(articleStore store.ArticleStore, tagStore store.TagStore, favoriteStore store.FavoriteStore, profileServiceClient pb.ProfileServiceClient) *ArticleService {
 	return &ArticleService{
 		articleStore: articleStore,
 		tagStore: tagStore,
+		favoriteStore: favoriteStore,
 		profileServiceClient: profileServiceClient,
 	}
 }
@@ -46,7 +48,9 @@ func (service *ArticleService) GetArticles(ctx context.Context, request *pb.GetA
 			articles, err = service.findArticlesByAuthor(offset, limit, userId.Id)
 		}
 	} else if request.Favorited != "" {
-		articles, err = service.findArticlesByFavoritedUsername(request.Favorited, offset, limit)
+		if userId, errr := service.getProfileIdByUsername(request.Favorited); errr == nil {
+			articles, err = service.findArticlesFavoritedByUserId(offset, limit, userId.Id)
+		}
 	} else {
 		articles, err = service.findArticles(offset, limit)
 	}
@@ -70,6 +74,11 @@ func (service *ArticleService) GetArticles(ctx context.Context, request *pb.GetA
 			return nil, err
 		}
 
+		isFavorited := false
+		if ctx.Value(interceptor.CurrentUserKey{}) != nil {
+			isFavorited = service.isFavoritedByUserId(ctx.Value(interceptor.CurrentUserKey{}).(string), articleModel.Slug)
+		}
+
 		article := &pb.Article{
 			Slug: articleModel.Slug,
 			Title: articleModel.Title,
@@ -78,7 +87,7 @@ func (service *ArticleService) GetArticles(ctx context.Context, request *pb.GetA
 			TagList: tagList,
 			CreatedAt: articleModel.CreatedAt.UTC().String(),
 			UpdatedAt: articleModel.UpdatedAt.UTC().String(),
-			Favorited: service.isFavoritedByUser("TODO"),
+			Favorited: isFavorited,
 			FavoritesCount: 0,
 			Author: &pb.Profile{
 				Username: author.Profile.Username,
@@ -173,14 +182,14 @@ func (service *ArticleService) findArticlesByAuthor(offset, limit int32, userId 
 	return service.articleStore.FindByAuthorId(offset, limit, userId)
 }
 
-func (service *ArticleService) findArticlesByFavoritedUsername(tag string, offset, limit int32) ([]*model.Article, error) {
-	return nil, nil
+func (service *ArticleService) findArticlesFavoritedByUserId(offset, limit int32, userId string) ([]*model.Article, error) {
+	return service.articleStore.FindFavoritedByUserId(offset, limit, userId)
 }
 
 func (service *ArticleService) findArticles(offset, limit int32) ([]*model.Article, error) {
 	return service.articleStore.Find(offset, limit)
 }
 
-func (service *ArticleService) isFavoritedByUser(userId string) bool {
-	return false
+func (service *ArticleService) isFavoritedByUserId(slug, userId string) bool {
+	return service.favoriteStore.IsArticleFavoritedByUserId(slug, userId)
 }
