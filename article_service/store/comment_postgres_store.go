@@ -37,3 +37,10 @@ func (store *CommentPostgresStore) Delete(comment *model.Comment) error {
 
 	return result.Error
 }
+
+func (store *CommentPostgresStore) FindByArticleId(articleId string) ([]*model.Comment, error) {
+	var comments []*model.Comment
+	result := store.db.Where("article_id = ?", articleId).Order("created_at desc").Find(&comments)
+
+	return comments, result.Error
+}

@@ -53,6 +53,10 @@ func (handler *ArticleHandler) DeleteArticleFavorite(ctx context.Context, reques
 	return handler.favoriteService.DeleteArticleFavorite(ctx, request)
 }
 
+func (handler *ArticleHandler) GetArticleComments(ctx context.Context, request *pb.GetArticleCommentsRequest) (*pb.MultipleCommentsResponse, error) {
+	return handler.commentService.GetArticleComments(ctx, request)
+}
+
 func (handler *ArticleHandler) CreateArticleComment(ctx context.Context, request *pb.NewCommentRequest) (*pb.SingleCommentResponse, error) {
 	return handler.commentService.CreateArticleComment(ctx, request)
 }

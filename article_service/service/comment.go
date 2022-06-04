@@ -27,6 +27,45 @@ func NewCommentService(commentStore store.CommentStore, articleStore store.Artic
 	}
 }
 
+func (service *CommentService) GetArticleComments(ctx context.Context, request *pb.GetArticleCommentsRequest) (*pb.MultipleCommentsResponse, error) {
+	article, err := service.articleStore.FindBySlug(request.Slug)
+	if err != nil {
+		return nil, err
+	}
+
+	comments, err := service.commentStore.FindByArticleId(article.ID.String())
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.MultipleCommentsResponse{
+		Comments: []*pb.Comment{},
+	}
+
+	for _, commentModel := range comments {
+		author, err := service.getProfileById(ctx, commentModel.UserID.String())
+		if err != nil {
+			return nil, err
+		}
+
+		comment := &pb.Comment{
+			Id: commentModel.ID,
+			CreatedAt: commentModel.CreatedAt.Format("2006-01-02T15:04:05Z"),
+			UpdatedAt: commentModel.UpdatedAt.Format("2006-01-02T15:04:05Z"),
+			Body: commentModel.Body,
+			Author: &pb.Profile{
+				Username: author.Profile.Username,
+				Bio: author.Profile.Bio,
+				Image: author.Profile.Image,
+				Following: author.Profile.Following,
+			},
+		}
+		response.Comments = append(response.Comments, comment)
+	}
+
+	return response, nil
+}
+
 func (service *CommentService) CreateArticleComment(ctx context.Context, request *pb.NewCommentRequest) (*pb.SingleCommentResponse, error) {
 	currentUserIdString := ctx.Value(interceptor.CurrentUserKey{}).(string)
 	article, err := service.articleStore.FindBySlug(request.Comment.Slug)
@@ -78,7 +117,7 @@ func (service *CommentService) DeleteArticleComment(ctx context.Context, request
 	}
 
 	if comment.ArticleID.String() != article.ID.String() {
-		return nil, status.Error(codes.InvalidArgument, "comment does not belong to this article")
+		return nil, status.Error(codes.InvalidArgument, "comment not from this article")
 	}
 
 	if comment.UserID.String() != currentUserIdString {
