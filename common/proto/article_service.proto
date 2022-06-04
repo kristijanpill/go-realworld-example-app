@@ -158,7 +158,7 @@ service ArticleService {
   rpc CreateArticleComment(NewCommentRequest) returns (SingleCommentResponse) {
     option (google.api.http) = {
       post: "/api/articles/{comment.slug}/comments",
-      body: ""
+      body: "*"
     };
   }
   rpc DeleteArticleComment(DeleteArticleCommentRequest) returns (google.protobuf.Empty) {
