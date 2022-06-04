@@ -209,14 +209,14 @@ func request_ArticleService_UpdateArticle_0(ctx context.Context, marshaler runti
 		_   = err
 	)
 
-	val, ok = pathParams["slug"]
+	val, ok = pathParams["article.slug"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "slug")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "article.slug")
 	}
 
-	protoReq.Slug, err = runtime.String(val)
+	err = runtime.PopulateFieldFromPath(&protoReq, "article.slug", val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "slug", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "article.slug", err)
 	}
 
 	msg, err := client.UpdateArticle(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -243,14 +243,14 @@ func local_request_ArticleService_UpdateArticle_0(ctx context.Context, marshaler
 		_   = err
 	)
 
-	val, ok = pathParams["slug"]
+	val, ok = pathParams["article.slug"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "slug")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "article.slug")
 	}
 
-	protoReq.Slug, err = runtime.String(val)
+	err = runtime.PopulateFieldFromPath(&protoReq, "article.slug", val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "slug", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "article.slug", err)
 	}
 
 	msg, err := server.UpdateArticle(ctx, &protoReq)
@@ -751,7 +751,7 @@ func RegisterArticleServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/UpdateArticle", runtime.WithHTTPPathPattern("/api/articles/{slug}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/article.ArticleService/UpdateArticle", runtime.WithHTTPPathPattern("/api/articles/{article.slug}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1066,7 +1066,7 @@ func RegisterArticleServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/UpdateArticle", runtime.WithHTTPPathPattern("/api/articles/{slug}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/article.ArticleService/UpdateArticle", runtime.WithHTTPPathPattern("/api/articles/{article.slug}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1241,7 +1241,7 @@ var (
 
 	pattern_ArticleService_GetArticle_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "articles", "slug"}, ""))
 
-	pattern_ArticleService_UpdateArticle_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "articles", "slug"}, ""))
+	pattern_ArticleService_UpdateArticle_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "articles", "article.slug"}, ""))
 
 	pattern_ArticleService_DeleteArticle_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"api", "articles", "slug"}, ""))
 

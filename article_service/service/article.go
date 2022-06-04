@@ -8,7 +8,9 @@ import (
 	"github.com/kristijanpill/go-realworld-example-app/article_service/store"
 	"github.com/kristijanpill/go-realworld-example-app/common/interceptor"
 	"github.com/kristijanpill/go-realworld-example-app/common/proto/pb"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
 )
 
@@ -64,7 +66,6 @@ func (service *ArticleService) GetArticles(ctx context.Context, request *pb.GetA
 	}
 
 	for _, articleModel := range articles {
-		tagList := service.getTagList(articleModel)
 		author, err := service.getProfileById(ctx, articleModel.UserID.String())
 		if err != nil {
 			return nil, err
@@ -72,7 +73,7 @@ func (service *ArticleService) GetArticles(ctx context.Context, request *pb.GetA
 
 		isFavorited := false
 		if ctx.Value(interceptor.CurrentUserKey{}) != nil {
-			isFavorited = service.isFavoritedByUserId(ctx.Value(interceptor.CurrentUserKey{}).(string), articleModel.Slug)
+			isFavorited = service.isFavoritedByUserId(ctx.Value(interceptor.CurrentUserKey{}).(string), articleModel.ID.String())
 		}
 
 		article := &pb.Article{
@@ -80,7 +81,7 @@ func (service *ArticleService) GetArticles(ctx context.Context, request *pb.GetA
 			Title: articleModel.Title,
 			Description: articleModel.Description,
 			Body: articleModel.Body,
-			TagList: tagList,
+			TagList: service.getTagList(articleModel),
 			CreatedAt: articleModel.CreatedAt.Format("2006-01-02T15:04:05Z"),
 			UpdatedAt: articleModel.UpdatedAt.Format("2006-01-02T15:04:05Z"),
 			Favorited: isFavorited,
@@ -161,7 +162,6 @@ func (service *ArticleService) GetArticle(ctx context.Context, request *pb.GetAr
 		return nil, err
 	}
 
-	tagList := service.getTagList(article)
 	author, err := service.getProfileById(ctx, article.UserID.String())
 	if err != nil {
 		return nil, err
@@ -169,7 +169,7 @@ func (service *ArticleService) GetArticle(ctx context.Context, request *pb.GetAr
 
 	isFavorited := false
 	if ctx.Value(interceptor.CurrentUserKey{}) != nil {
-		isFavorited = service.isFavoritedByUserId(ctx.Value(interceptor.CurrentUserKey{}).(string), article.Slug)
+		isFavorited = service.isFavoritedByUserId(ctx.Value(interceptor.CurrentUserKey{}).(string), article.ID.String())
 	}
 
 	return &pb.SingleArticleResponse{
@@ -178,7 +178,58 @@ func (service *ArticleService) GetArticle(ctx context.Context, request *pb.GetAr
 			Title: article.Title,
 			Description: article.Description,
 			Body: article.Body,
-			TagList: tagList,
+			TagList: service.getTagList(article),
+			CreatedAt: article.CreatedAt.Format("2006-01-02T15:04:05Z"),
+			UpdatedAt: article.UpdatedAt.Format("2006-01-02T15:04:05Z"),
+			Favorited: isFavorited,
+			FavoritesCount: 0,
+			Author: &pb.Profile{
+				Username: author.Profile.Username,
+				Bio: author.Profile.Bio,
+				Image: author.Profile.Image,
+				Following: author.Profile.Following,
+			},
+		},
+	}, nil
+}
+
+func (service *ArticleService) UpdateArticle(ctx context.Context, request *pb.UpdateArticleRequest) (*pb.SingleArticleResponse, error) {
+	currentUserIdString := ctx.Value(interceptor.CurrentUserKey{}).(string)
+	article, err := service.findArticleBySlug(request.Article.Slug)
+	if err != nil {
+		return nil, err
+	}
+
+	if article.UserID.String() != currentUserIdString {
+		return nil, status.Error(codes.Unauthenticated, "forbidden")
+	}
+
+	article.Title = request.Article.Title
+	article.Description = request.Article.Description
+	article.Body = request.Article.Body
+
+	article, err = service.updateArticle(article)
+	if err != nil {
+		return nil, err
+	}
+
+	author, err := service.getProfileById(ctx, article.UserID.String())
+	if err != nil {
+		return nil, err
+	}
+
+	isFavorited := false
+	if ctx.Value(interceptor.CurrentUserKey{}) != nil {
+		isFavorited = service.isFavoritedByUserId(ctx.Value(interceptor.CurrentUserKey{}).(string), article.ID.String())
+	}
+
+	return &pb.SingleArticleResponse{
+		Article: &pb.Article{
+			Slug: article.Slug,
+			Title: article.Title,
+			Description: article.Description,
+			Body: article.Body,
+			TagList: service.getTagList(article),
 			CreatedAt: article.CreatedAt.Format("2006-01-02T15:04:05Z"),
 			UpdatedAt: article.UpdatedAt.Format("2006-01-02T15:04:05Z"),
 			Favorited: isFavorited,
@@ -230,6 +281,10 @@ func (service *ArticleService) findArticleBySlug(slug string) (*model.Article, e
 
 func (service *ArticleService) isFavoritedByUserId(slug, userId string) bool {
 	return service.favoriteStore.IsArticleFavoritedByUserId(slug, userId)
+}
+
+func (service *ArticleService) updateArticle(article *model.Article) (*model.Article, error) {
+	return service.articleStore.Update(article)
 }
 
 func (service *ArticleService) getTagList(article *model.Article) []string {

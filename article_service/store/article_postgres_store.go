@@ -1,6 +1,7 @@
 package store
 
 import (
+	"github.com/gosimple/slug"
 	"github.com/kristijanpill/go-realworld-example-app/article_service/model"
 	"gorm.io/gorm"
 )
@@ -61,8 +62,13 @@ func (store *ArticlePostgresStore) FindByAuthorId(offset, limit int32, userId st
 
 func (store *ArticlePostgresStore) FindFavoritedByUserId(offset, limit int32, userId string) ([]*model.Article, error) {
 	var articles []*model.Article
-	result := store.db.Joins("JOIN favorites ON favorites.article_id = articles.slug").Where("favorites.user_id = ?", userId).Limit(int(limit)).Offset(int(offset)).Order("created_at desc").Find(&articles)
+	result := store.db.Joins("JOIN favorites ON favorites.article_id = articles.id").Where("favorites.user_id = ?", userId).Limit(int(limit)).Offset(int(offset)).Order("created_at desc").Find(&articles)
 
 	return articles, result.Error
 }
 
+func (store *ArticlePostgresStore) Update(article *model.Article) (*model.Article, error) {
+	result := store.db.Model(article).Updates(model.Article{Slug: slug.Make(article.Title), Title: article.Title, Description: article.Description, Body: article.Body})
+	
+	return article, result.Error
+}

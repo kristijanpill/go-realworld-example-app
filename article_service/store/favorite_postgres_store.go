@@ -26,9 +26,9 @@ func (store *FavoritePostgresStore) Create(favorite *model.Favorite) (*model.Fav
 	return favorite, result.Error
 }
 
-func (store *FavoritePostgresStore) FindByUserIdAndSlug(userId, slug string) (*model.Favorite, error) {
+func (store *FavoritePostgresStore) FindByUserIdAndArticleId(userId, articleId string) (*model.Favorite, error) {
 	var favorite model.Favorite
-	result := store.db.Preload("Article.Tags").Where("user_id = ? AND article_id = ?", userId, slug).First(&favorite)
+	result := store.db.Preload("Article.Tags").Where("user_id = ? AND article_id = ?", userId, articleId).First(&favorite)
 
 	return &favorite, result.Error
 }

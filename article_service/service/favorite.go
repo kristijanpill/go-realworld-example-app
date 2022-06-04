@@ -74,7 +74,12 @@ func (service *FavoriteService) CreateArticleFavorite(ctx context.Context, reque
 
 func (service *FavoriteService) DeleteArticleFavorite(ctx context.Context, request *pb.DeleteArticleFavoriteRequest) (*pb.SingleArticleResponse, error) {
 	currentUserIdString := ctx.Value(interceptor.CurrentUserKey{}).(string)
-	favorite, err := service.favoriteStore.FindByUserIdAndSlug(currentUserIdString, request.Slug)
+	article, err := service.articleStore.FindBySlug(request.Slug)
+	if err != nil {
+		return nil, err
+	}
+
+	favorite, err := service.favoriteStore.FindByUserIdAndArticleId(currentUserIdString, article.ID.String())
 	if err != nil {
 		return nil, err
 	}

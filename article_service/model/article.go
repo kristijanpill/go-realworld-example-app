@@ -8,8 +8,9 @@ import (
 )
 
 type Article struct {
+	ID uuid.UUID `gorm:"primaryKey; unique; type:uuid"`
 	UserID uuid.UUID `gorm:"type:uuid"`
-	Slug   string    `gorm:"primaryKey"`
+	Slug   string
 	Title string
 	Description string
 	Body string
@@ -25,6 +26,7 @@ func NewArticle(userIdString, title, description, body string, tags []*Tag) (*Ar
 	}
 
 	return &Article{
+		ID: uuid.New(),
 		UserID: userId,
 		Slug: slug.Make(title),
 		Title: title,

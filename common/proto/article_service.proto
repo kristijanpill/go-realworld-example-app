@@ -54,15 +54,14 @@ message SingleArticleResponse {
   Article article = 1;
 }
 
-message UpdateArticle {
-  string title = 1;
-  string description = 2;
-  string body = 3;
-}
-
 message UpdateArticleRequest {
-  string slug = 1;
-  UpdateArticle article = 2;
+  message UpdateArticle {
+    string title = 1;
+    string description = 2;
+    string body = 3;
+    string slug = 4;
+  }
+  UpdateArticle article = 1;
 }
 
 message Comment {
@@ -143,7 +142,7 @@ service ArticleService {
   }
   rpc UpdateArticle(UpdateArticleRequest) returns (SingleArticleResponse) {
     option (google.api.http) = {
-      put: "/api/articles/{slug}",
+      put: "/api/articles/{article.slug}",
       body: "*"
     };
   }

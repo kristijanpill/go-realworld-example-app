@@ -9,4 +9,5 @@ type ArticleStore interface {
 	FindByTag(offset, limit int32, tag string) ([]*model.Article, error)
 	FindByAuthorId(offset, limit int32, userId string) ([]*model.Article, error)
 	FindFavoritedByUserId(offset, limit int32, userId string) ([]*model.Article, error)
+	Update(*model.Article) (*model.Article, error)
 }
