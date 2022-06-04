@@ -51,6 +51,11 @@ func (service *FavoriteService) CreateArticleFavorite(ctx context.Context, reque
 		tagList = append(tagList, tag.Name)
 	}
 
+	favoritesCount, err := service.favoriteStore.CountFavoritesByArticleId(article.ID.String())
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.SingleArticleResponse{
 		Article: &pb.Article{
 			Slug: article.Slug,
@@ -61,7 +66,7 @@ func (service *FavoriteService) CreateArticleFavorite(ctx context.Context, reque
 			CreatedAt: article.CreatedAt.UTC().String(),
 			UpdatedAt: article.UpdatedAt.UTC().String(),
 			Favorited: true,
-			FavoritesCount: 1,
+			FavoritesCount: int32(favoritesCount),
 			Author: &pb.Profile{
 				Username: author.Profile.Username,
 				Bio: author.Profile.Bio,
@@ -99,6 +104,11 @@ func (service *FavoriteService) DeleteArticleFavorite(ctx context.Context, reque
 		tagList = append(tagList, tag.Name)
 	}
 
+	favoritesCount, err := service.favoriteStore.CountFavoritesByArticleId(article.ID.String())
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.SingleArticleResponse{
 		Article: &pb.Article{
 			Slug: favorite.Article.Slug,
@@ -109,7 +119,7 @@ func (service *FavoriteService) DeleteArticleFavorite(ctx context.Context, reque
 			CreatedAt: favorite.Article.CreatedAt.UTC().String(),
 			UpdatedAt: favorite.Article.UpdatedAt.UTC().String(),
 			Favorited: false,
-			FavoritesCount: 0,
+			FavoritesCount: int32(favoritesCount),
 			Author: &pb.Profile{
 				Username: author.Profile.Username,
 				Bio: author.Profile.Bio,

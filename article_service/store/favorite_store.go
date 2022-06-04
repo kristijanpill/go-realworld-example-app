@@ -7,4 +7,5 @@ type FavoriteStore interface {
 	FindByUserIdAndArticleId(userId, articleId string) (*model.Favorite, error)
 	Delete(*model.Favorite) error
 	IsArticleFavoritedByUserId(slug, userId string) bool
+	CountFavoritesByArticleId(articleId string) (int64, error)
 }

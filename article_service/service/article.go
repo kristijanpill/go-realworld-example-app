@@ -68,6 +68,11 @@ func (service *ArticleService) GetArticlesFeed(ctx context.Context, request *pb.
 			isFavorited = service.isFavoritedByUserId(ctx.Value(interceptor.CurrentUserKey{}).(string), articleModel.ID.String())
 		}
 
+		favoritesCount, err := service.favoriteStore.CountFavoritesByArticleId(articleModel.ID.String())
+		if err != nil {
+			return nil, err
+		}
+
 		article := &pb.Article{
 			Slug: articleModel.Slug,
 			Title: articleModel.Title,
@@ -77,7 +82,7 @@ func (service *ArticleService) GetArticlesFeed(ctx context.Context, request *pb.
 			CreatedAt: articleModel.CreatedAt.Format("2006-01-02T15:04:05Z"),
 			UpdatedAt: articleModel.UpdatedAt.Format("2006-01-02T15:04:05Z"),
 			Favorited: isFavorited,
-			FavoritesCount: 0,
+			FavoritesCount: int32(favoritesCount),
 			Author: &pb.Profile{
 				Username: author.Profile.Username,
 				Bio: author.Profile.Bio,
@@ -137,6 +142,11 @@ func (service *ArticleService) GetArticles(ctx context.Context, request *pb.GetA
 			isFavorited = service.isFavoritedByUserId(ctx.Value(interceptor.CurrentUserKey{}).(string), articleModel.ID.String())
 		}
 
+		favoritesCount, err := service.favoriteStore.CountFavoritesByArticleId(articleModel.ID.String())
+		if err != nil {
+			return nil, err
+		}
+
 		article := &pb.Article{
 			Slug: articleModel.Slug,
 			Title: articleModel.Title,
@@ -146,7 +156,7 @@ func (service *ArticleService) GetArticles(ctx context.Context, request *pb.GetA
 			CreatedAt: articleModel.CreatedAt.Format("2006-01-02T15:04:05Z"),
 			UpdatedAt: articleModel.UpdatedAt.Format("2006-01-02T15:04:05Z"),
 			Favorited: isFavorited,
-			FavoritesCount: 0,
+			FavoritesCount: int32(favoritesCount),
 			Author: &pb.Profile{
 				Username: author.Profile.Username,
 				Bio: author.Profile.Bio,
@@ -233,6 +243,11 @@ func (service *ArticleService) GetArticle(ctx context.Context, request *pb.GetAr
 		isFavorited = service.isFavoritedByUserId(ctx.Value(interceptor.CurrentUserKey{}).(string), article.ID.String())
 	}
 
+	favoritesCount, err := service.favoriteStore.CountFavoritesByArticleId(article.ID.String())
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.SingleArticleResponse{
 		Article: &pb.Article{
 			Slug: article.Slug,
@@ -243,7 +258,7 @@ func (service *ArticleService) GetArticle(ctx context.Context, request *pb.GetAr
 			CreatedAt: article.CreatedAt.Format("2006-01-02T15:04:05Z"),
 			UpdatedAt: article.UpdatedAt.Format("2006-01-02T15:04:05Z"),
 			Favorited: isFavorited,
-			FavoritesCount: 0,
+			FavoritesCount: int32(favoritesCount),
 			Author: &pb.Profile{
 				Username: author.Profile.Username,
 				Bio: author.Profile.Bio,
@@ -284,6 +299,11 @@ func (service *ArticleService) UpdateArticle(ctx context.Context, request *pb.Up
 		isFavorited = service.isFavoritedByUserId(ctx.Value(interceptor.CurrentUserKey{}).(string), article.ID.String())
 	}
 
+	favoritesCount, err := service.favoriteStore.CountFavoritesByArticleId(article.ID.String())
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.SingleArticleResponse{
 		Article: &pb.Article{
 			Slug: article.Slug,
@@ -294,7 +314,7 @@ func (service *ArticleService) UpdateArticle(ctx context.Context, request *pb.Up
 			CreatedAt: article.CreatedAt.Format("2006-01-02T15:04:05Z"),
 			UpdatedAt: article.UpdatedAt.Format("2006-01-02T15:04:05Z"),
 			Favorited: isFavorited,
-			FavoritesCount: 0,
+			FavoritesCount: int32(favoritesCount),
 			Author: &pb.Profile{
 				Username: author.Profile.Username,
 				Bio: author.Profile.Bio,

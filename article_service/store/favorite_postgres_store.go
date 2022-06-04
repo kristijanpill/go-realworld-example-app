@@ -44,3 +44,10 @@ func (store *FavoritePostgresStore) IsArticleFavoritedByUserId(slug, userId stri
 	
 	return store.db.Where("user_id = ? AND article_id = ?", slug, userId).First(&favorite).RowsAffected == 1
 }
+
+func (store *FavoritePostgresStore) CountFavoritesByArticleId(articleId string) (int64, error) {
+	var count int64
+	result := store.db.Model(&model.Favorite{}).Where("article_id = ?", articleId).Count(&count)
+
+	return count, result.Error
+}
