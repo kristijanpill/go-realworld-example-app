@@ -45,14 +45,6 @@ func (handler *ArticleHandler) DeleteArticle(ctx context.Context, request *pb.De
 	return handler.articleService.DeleteArticle(ctx, request)
 }
 
-func (handler *ArticleHandler) CreateArticleFavorite(ctx context.Context, request *pb.CreateArticleFavoriteRequest) (*pb.SingleArticleResponse, error) {
-	return handler.favoriteService.CreateArticleFavorite(ctx, request)
-}
-
-func (handler *ArticleHandler) DeleteArticleFavorite(ctx context.Context, request *pb.DeleteArticleFavoriteRequest) (*pb.SingleArticleResponse, error) {
-	return handler.favoriteService.DeleteArticleFavorite(ctx, request)
-}
-
 func (handler *ArticleHandler) GetArticleComments(ctx context.Context, request *pb.GetArticleCommentsRequest) (*pb.MultipleCommentsResponse, error) {
 	return handler.commentService.GetArticleComments(ctx, request)
 }
@@ -63,4 +55,16 @@ func (handler *ArticleHandler) CreateArticleComment(ctx context.Context, request
 
 func (handler *ArticleHandler) DeleteArticleComment(ctx context.Context, request *pb.DeleteArticleCommentRequest) (*emptypb.Empty, error) {
 	return  handler.commentService.DeleteArticleComment(ctx, request)
+}
+
+func (handler *ArticleHandler) CreateArticleFavorite(ctx context.Context, request *pb.CreateArticleFavoriteRequest) (*pb.SingleArticleResponse, error) {
+	return handler.favoriteService.CreateArticleFavorite(ctx, request)
+}
+
+func (handler *ArticleHandler) DeleteArticleFavorite(ctx context.Context, request *pb.DeleteArticleFavoriteRequest) (*pb.SingleArticleResponse, error) {
+	return handler.favoriteService.DeleteArticleFavorite(ctx, request)
+}
+
+func (handler *ArticleHandler) GetTags(ctx context.Context, request *emptypb.Empty) (*pb.TagsResponse, error) {
+	return handler.tagService.GetTags()
 }

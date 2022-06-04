@@ -33,3 +33,10 @@ func (store *TagPostgresStore) FindByName(name string) (*model.Tag, error) {
 
 	return &tag, result.Error
 }
+
+func (store *TagPostgresStore) FindAll() ([]*model.Tag, error) {
+	var tags []*model.Tag
+	result := store.db.Find(&tags)
+
+	return tags, result.Error
+}
