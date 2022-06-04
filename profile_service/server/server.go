@@ -35,10 +35,10 @@ func NewServer(config *config.Config) *Server {
 
 func (server *Server) Start() {
 	db := server.initDbConnection()
-	profileStore := server.initProfilePostgresStore(db)
-	profileService := service.NewProfileService(profileStore)
 	followStore := server.initFollowPostgresStore(db)
+	profileStore := server.initProfilePostgresStore(db)
 	followService := service.NewFollowService(followStore, profileStore)
+	profileService := service.NewProfileService(profileStore, followService)
 	profileHandler := handler.NewProfileHandler(profileService, followService)
 
 	publicKey := server.initPublicKey()

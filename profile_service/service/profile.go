@@ -1,6 +1,9 @@
 package service
 
 import (
+	"context"
+
+	"github.com/kristijanpill/go-realworld-example-app/common/interceptor"
 	"github.com/kristijanpill/go-realworld-example-app/common/proto/pb"
 	"github.com/kristijanpill/go-realworld-example-app/profile_service/model"
 	"github.com/kristijanpill/go-realworld-example-app/profile_service/store"
@@ -8,33 +11,55 @@ import (
 
 type ProfileService struct {
 	store store.ProfileStore
+	followService *FollowService
 }
 
-func NewProfileService(store store.ProfileStore) *ProfileService {
+func NewProfileService(store store.ProfileStore, followService *FollowService) *ProfileService {
 	return &ProfileService{
 		store: store,
+		followService: followService,
 	}
 }
 
-func (service *ProfileService) GetProfileByUsername(request *pb.ProfileUsernameRequest) (*model.Profile, error) {
+func (service *ProfileService) GetProfileByUsername(ctx context.Context, request *pb.ProfileUsernameRequest) (*pb.ProfileResponse, error) {
 	profile, err := service.store.FindByUsername(request.Username)
 	if err != nil {
 		return nil, err
 	}
 
-	return profile, nil
+	following := false
+	if (ctx.Value(interceptor.CurrentUserKey{}) != nil) {
+		following = service.followService.ExistsByProfileIdAndTargetId(ctx.Value(interceptor.CurrentUserKey{}).(string), profile.ID.String())
+	}
+
+	return &pb.ProfileResponse{
+		Profile: &pb.Profile{
+			Username: profile.Username,
+			Bio: profile.Bio,
+			Image: profile.Image,
+			Following: following,
+		},
+	}, nil
 }
 
-func (service *ProfileService) GetProfileById(request *pb.ProfileIdRequest) (*pb.ProfileInfo, error) {
+func (service *ProfileService) GetProfileById(ctx context.Context, request *pb.ProfileIdRequest) (*pb.ProfileResponse, error) {
 	profile, err := service.store.FindById(request.Id)
 	if err != nil {
 		return nil, err
 	}
 
-	return &pb.ProfileInfo{
-		Username: profile.Username,
-		Bio: profile.Bio,
-		Image: profile.Image,
+	following := false
+	if (ctx.Value(interceptor.CurrentUserKey{}) != nil) {
+		following = service.followService.ExistsByProfileIdAndTargetId(ctx.Value(interceptor.CurrentUserKey{}).(string), profile.ID.String())
+	}
+
+	return &pb.ProfileResponse{
+		Profile: &pb.Profile{
+			Username: profile.Username,
+			Bio: profile.Bio,
+			Image: profile.Image,
+			Following: following,
+		},
 	}, nil
 }
 
@@ -72,4 +97,15 @@ func (service *ProfileService) UpdateProfile(request *pb.UpdateProfileRequest) (
 	}
 
 	return request.Profile, nil
+}
+
+func (service *ProfileService) GetProfileIdByUsername(request *pb.ProfileIdUsernameRequest) (*pb.ProfileIdResponse, error) {
+	profile, err := service.store.FindByUsername(request.Username)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.ProfileIdResponse{
+		Id: profile.ID.String(),
+	}, nil
 }

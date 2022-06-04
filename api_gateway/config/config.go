@@ -8,6 +8,8 @@ type Config struct {
 	UserServicePort    string
 	ProfileServiceHost string
 	ProfileServicePort string
+	ArticleServiceHost string
+	ArticleServicePort string
 }
 
 func NewConfig() *Config {
@@ -17,5 +19,7 @@ func NewConfig() *Config {
 		UserServicePort:    os.Getenv("USER_SERVICE_PORT"),
 		ProfileServiceHost: os.Getenv("PROFILE_SERVICE_HOST"),
 		ProfileServicePort: os.Getenv("PROFILE_SERVICE_PORT"),
+		ArticleServiceHost: os.Getenv("ARTICLE_SERVICE_HOST"),
+		ArticleServicePort: os.Getenv("ARTICLE_SERVICE_PORT"),
 	}
 }

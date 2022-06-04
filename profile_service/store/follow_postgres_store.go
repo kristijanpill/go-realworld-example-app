@@ -36,3 +36,10 @@ func (store *FollowPostgresStore) ExistsByProfileIdAndTargetId(profileId, target
 	var follow model.Follow
 	return store.db.Where("profile_id = ? AND target_id = ?", profileId, targetId).First(&follow).RowsAffected == 1
 }
+
+func (store *FollowPostgresStore) FindAllByProfileId(profileId string) ([]*model.Follow, error) {
+	var follows []*model.Follow
+	result := store.db.Select("target_id").Where("profile_id = ?", profileId).Find(&follows)
+
+	return follows, result.Error
+}
