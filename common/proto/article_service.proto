@@ -76,13 +76,12 @@ message MultipleCommentsResponse {
   repeated Comment comments = 1;
 }
 
-message NewComment {
-  string body = 1;
-}
-
 message NewCommentRequest {
-  string slug = 1;
-  NewComment comment = 2;
+  message NewComment {
+    string body = 1;
+    string slug = 2;
+  }
+  NewComment comment = 1;
 }
 
 message SingleCommentResponse {
@@ -158,7 +157,8 @@ service ArticleService {
   }
   rpc CreateArticleComment(NewCommentRequest) returns (SingleCommentResponse) {
     option (google.api.http) = {
-      post: "/api/articles/{slug}/comments"
+      post: "/api/articles/{comment.slug}/comments",
+      body: ""
     };
   }
   rpc DeleteArticleComment(DeleteArticleCommentRequest) returns (google.protobuf.Empty) {

@@ -3,8 +3,8 @@ package model
 import "github.com/google/uuid"
 
 type Favorite struct {
-	UserID uuid.UUID `gorm:"primaryKey"`
-	ArticleID string `gorm:"primaryKey"`
+	UserID uuid.UUID `gorm:"primaryKey;type:uuid"`
+	ArticleID uuid.UUID `gorm:"primaryKey;type:uuid"`
 	Article *Article
 }
 
@@ -16,7 +16,7 @@ func NewFavorite(userIdString string, article *Article) (*Favorite, error) {
 
 	return &Favorite{
 		UserID: userId,
-		ArticleID: article.Slug,
+		ArticleID: article.ID,
 		Article: article,
 	}, nil
 }

@@ -38,11 +38,13 @@ func (server *Server) Start() {
 	articleStore := server.initArticlePostgresStore(db)
 	tagStore := server.initTagPostgresStore(db)
 	favoriteStore := server.initFavoritePostgresStore(db)
+	commentStore := server.initCommentPostgresStore(db)
 	profileServiceClient := server.initProfileServiceClient()
 	articleService := service.NewArticleService(articleStore, tagStore, favoriteStore, profileServiceClient)
 	tagService := service.NewTagService(tagStore)
 	favoriteService := service.NewFavoriteService(favoriteStore, articleStore, profileServiceClient)
-	articleHandler := handler.NewArticleHandler(articleService, tagService, favoriteService)
+	commentService := service.NewCommentService(commentStore, articleStore, profileServiceClient)
+	articleHandler := handler.NewArticleHandler(articleService, tagService, favoriteService, commentService)
 
 	publicKey := server.initPublicKey()
 	authInterceptor := interceptor.NewAuthInterceptor("Token", server.config.RestrictedPaths, publicKey)
@@ -72,7 +74,7 @@ func (server *Server) initDbConnection() *gorm.DB {
 func (server *Server) initArticlePostgresStore(db *gorm.DB) *store.ArticlePostgresStore {
 	articleStore, err := store.NewArticlePostgresStore(db)
 	if err != nil {
-		log.Fatal("failed to init profile store: ", err)
+		log.Fatal("failed to init article store: ", err)
 	}
 
 	return articleStore
@@ -81,7 +83,7 @@ func (server *Server) initArticlePostgresStore(db *gorm.DB) *store.ArticlePostgr
 func (server *Server) initTagPostgresStore(db *gorm.DB) *store.TagPostgresStore {
 	tagStore, err := store.NewTagPostgresStore(db)
 	if err != nil {
-		log.Fatal("failed to init follow store: ", err)
+		log.Fatal("failed to init tag store: ", err)
 	}
 
 	return tagStore
@@ -90,10 +92,19 @@ func (server *Server) initTagPostgresStore(db *gorm.DB) *store.TagPostgresStore 
 func (server *Server) initFavoritePostgresStore(db *gorm.DB) *store.FavoritePostgresStore {
 	favoriteStore, err := store.NewFavoritePostgresStore(db)
 	if err != nil {
-		log.Fatal("failed to init follow store: ", err)
+		log.Fatal("failed to init favorite store: ", err)
 	}
 
 	return favoriteStore
+}
+
+func (server *Server) initCommentPostgresStore(db *gorm.DB) *store.CommentPostgresStore {
+	commentStore, err := store.NewCommentPostgresStore(db)
+	if err != nil {
+		log.Fatal("failed to init comment store: ", err)
+	}
+
+	return commentStore
 }
 
 func (server *Server) initProfileServiceClient() pb.ProfileServiceClient {

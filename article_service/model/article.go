@@ -8,7 +8,7 @@ import (
 )
 
 type Article struct {
-	ID uuid.UUID `gorm:"primaryKey; unique; type:uuid"`
+	ID uuid.UUID `gorm:"primaryKey;type:uuid"`
 	UserID uuid.UUID `gorm:"type:uuid"`
 	Slug   string
 	Title string

@@ -13,13 +13,15 @@ type ArticleHandler struct {
 	articleService *service.ArticleService
 	tagService *service.TagService
 	favoriteService *service.FavoriteService
+	commentService *service.CommentService
 }
 
-func NewArticleHandler(articleService *service.ArticleService, tagService *service.TagService, favoriteService *service.FavoriteService) *ArticleHandler {
+func NewArticleHandler(articleService *service.ArticleService, tagService *service.TagService, favoriteService *service.FavoriteService, commentService *service.CommentService) *ArticleHandler {
 	return &ArticleHandler{
 		articleService: articleService,
 		tagService: tagService,
 		favoriteService: favoriteService,
+		commentService: commentService,
 	}
 }
 
@@ -49,4 +51,8 @@ func (handler *ArticleHandler) CreateArticleFavorite(ctx context.Context, reques
 
 func (handler *ArticleHandler) DeleteArticleFavorite(ctx context.Context, request *pb.DeleteArticleFavoriteRequest) (*pb.SingleArticleResponse, error) {
 	return handler.favoriteService.DeleteArticleFavorite(ctx, request)
+}
+
+func (handler *ArticleHandler) CreateArticleComment(ctx context.Context, request *pb.NewCommentRequest) (*pb.SingleCommentResponse, error) {
+	return handler.commentService.CreateArticleComment(ctx, request)
 }
