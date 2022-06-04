@@ -5,6 +5,7 @@ import (
 
 	"github.com/kristijanpill/go-realworld-example-app/common/proto/pb"
 	"github.com/kristijanpill/go-realworld-example-app/profile_service/service"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type ProfileHandler struct {
@@ -46,4 +47,8 @@ func (handler *ProfileHandler) UpdateProfile(ctx context.Context, request *pb.Up
 
 func (handler *ProfileHandler) GetProfileIdByUsername(ctx context.Context, request *pb.ProfileIdUsernameRequest) (*pb.ProfileIdResponse, error) {
 	return handler.profileService.GetProfileIdByUsername(request)
+}
+
+func (handler *ProfileHandler) GetFollowedProfileIds(ctx context.Context, request *emptypb.Empty) (*pb.FollowedIds, error) {
+	return handler.followService.GetFollowedProfileIds(ctx)
 }

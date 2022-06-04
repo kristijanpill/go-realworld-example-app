@@ -67,6 +67,13 @@ func (store *ArticlePostgresStore) FindFavoritedByUserId(offset, limit int32, us
 	return articles, result.Error
 }
 
+func (store *ArticlePostgresStore) FindByUserIds(offset, limit int32, userIds []string) ([]*model.Article, error) {
+	var articles []*model.Article
+	result := store.db.Where("user_id IN ?", userIds).Limit(int(limit)).Offset(int(offset)).Order("created_at desc").Preload("Tags").Find(&articles)
+
+	return articles, result.Error
+}
+
 func (store *ArticlePostgresStore) Update(article *model.Article) (*model.Article, error) {
 	result := store.db.Model(article).Updates(model.Article{Slug: slug.Make(article.Title), Title: article.Title, Description: article.Description, Body: article.Body})
 	

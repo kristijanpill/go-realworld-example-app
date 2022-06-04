@@ -23,10 +23,10 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ArticleServiceClient interface {
-	GetArticlesFeed(ctx context.Context, in *GetArticlesFeedRequest, opts ...grpc.CallOption) (*MultipleArticlesResponse, error)
 	GetArticles(ctx context.Context, in *GetArticlesRequest, opts ...grpc.CallOption) (*MultipleArticlesResponse, error)
 	CreateArticle(ctx context.Context, in *NewArticleRequest, opts ...grpc.CallOption) (*SingleArticleResponse, error)
 	GetArticle(ctx context.Context, in *GetArticleRequest, opts ...grpc.CallOption) (*SingleArticleResponse, error)
+	GetArticlesFeed(ctx context.Context, in *GetArticlesFeedRequest, opts ...grpc.CallOption) (*MultipleArticlesResponse, error)
 	UpdateArticle(ctx context.Context, in *UpdateArticleRequest, opts ...grpc.CallOption) (*SingleArticleResponse, error)
 	DeleteArticle(ctx context.Context, in *DeleteArticleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetArticleComments(ctx context.Context, in *GetArticleCommentsRequest, opts ...grpc.CallOption) (*MultipleCommentsResponse, error)
@@ -43,15 +43,6 @@ type articleServiceClient struct {
 
 func NewArticleServiceClient(cc grpc.ClientConnInterface) ArticleServiceClient {
 	return &articleServiceClient{cc}
-}
-
-func (c *articleServiceClient) GetArticlesFeed(ctx context.Context, in *GetArticlesFeedRequest, opts ...grpc.CallOption) (*MultipleArticlesResponse, error) {
-	out := new(MultipleArticlesResponse)
-	err := c.cc.Invoke(ctx, "/article.ArticleService/GetArticlesFeed", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *articleServiceClient) GetArticles(ctx context.Context, in *GetArticlesRequest, opts ...grpc.CallOption) (*MultipleArticlesResponse, error) {
@@ -75,6 +66,15 @@ func (c *articleServiceClient) CreateArticle(ctx context.Context, in *NewArticle
 func (c *articleServiceClient) GetArticle(ctx context.Context, in *GetArticleRequest, opts ...grpc.CallOption) (*SingleArticleResponse, error) {
 	out := new(SingleArticleResponse)
 	err := c.cc.Invoke(ctx, "/article.ArticleService/GetArticle", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *articleServiceClient) GetArticlesFeed(ctx context.Context, in *GetArticlesFeedRequest, opts ...grpc.CallOption) (*MultipleArticlesResponse, error) {
+	out := new(MultipleArticlesResponse)
+	err := c.cc.Invoke(ctx, "/article.ArticleService/GetArticlesFeed", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -157,10 +157,10 @@ func (c *articleServiceClient) GetTags(ctx context.Context, in *emptypb.Empty, o
 // All implementations must embed UnimplementedArticleServiceServer
 // for forward compatibility
 type ArticleServiceServer interface {
-	GetArticlesFeed(context.Context, *GetArticlesFeedRequest) (*MultipleArticlesResponse, error)
 	GetArticles(context.Context, *GetArticlesRequest) (*MultipleArticlesResponse, error)
 	CreateArticle(context.Context, *NewArticleRequest) (*SingleArticleResponse, error)
 	GetArticle(context.Context, *GetArticleRequest) (*SingleArticleResponse, error)
+	GetArticlesFeed(context.Context, *GetArticlesFeedRequest) (*MultipleArticlesResponse, error)
 	UpdateArticle(context.Context, *UpdateArticleRequest) (*SingleArticleResponse, error)
 	DeleteArticle(context.Context, *DeleteArticleRequest) (*emptypb.Empty, error)
 	GetArticleComments(context.Context, *GetArticleCommentsRequest) (*MultipleCommentsResponse, error)
@@ -176,9 +176,6 @@ type ArticleServiceServer interface {
 type UnimplementedArticleServiceServer struct {
 }
 
-func (UnimplementedArticleServiceServer) GetArticlesFeed(context.Context, *GetArticlesFeedRequest) (*MultipleArticlesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetArticlesFeed not implemented")
-}
 func (UnimplementedArticleServiceServer) GetArticles(context.Context, *GetArticlesRequest) (*MultipleArticlesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetArticles not implemented")
 }
@@ -187,6 +184,9 @@ func (UnimplementedArticleServiceServer) CreateArticle(context.Context, *NewArti
 }
 func (UnimplementedArticleServiceServer) GetArticle(context.Context, *GetArticleRequest) (*SingleArticleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetArticle not implemented")
+}
+func (UnimplementedArticleServiceServer) GetArticlesFeed(context.Context, *GetArticlesFeedRequest) (*MultipleArticlesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetArticlesFeed not implemented")
 }
 func (UnimplementedArticleServiceServer) UpdateArticle(context.Context, *UpdateArticleRequest) (*SingleArticleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateArticle not implemented")
@@ -223,24 +223,6 @@ type UnsafeArticleServiceServer interface {
 
 func RegisterArticleServiceServer(s grpc.ServiceRegistrar, srv ArticleServiceServer) {
 	s.RegisterService(&ArticleService_ServiceDesc, srv)
-}
-
-func _ArticleService_GetArticlesFeed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetArticlesFeedRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ArticleServiceServer).GetArticlesFeed(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/article.ArticleService/GetArticlesFeed",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).GetArticlesFeed(ctx, req.(*GetArticlesFeedRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _ArticleService_GetArticles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -293,6 +275,24 @@ func _ArticleService_GetArticle_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ArticleServiceServer).GetArticle(ctx, req.(*GetArticleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ArticleService_GetArticlesFeed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetArticlesFeedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArticleServiceServer).GetArticlesFeed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/article.ArticleService/GetArticlesFeed",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArticleServiceServer).GetArticlesFeed(ctx, req.(*GetArticlesFeedRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -449,10 +449,6 @@ var ArticleService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ArticleServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetArticlesFeed",
-			Handler:    _ArticleService_GetArticlesFeed_Handler,
-		},
-		{
 			MethodName: "GetArticles",
 			Handler:    _ArticleService_GetArticles_Handler,
 		},
@@ -463,6 +459,10 @@ var ArticleService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetArticle",
 			Handler:    _ArticleService_GetArticle_Handler,
+		},
+		{
+			MethodName: "GetArticlesFeed",
+			Handler:    _ArticleService_GetArticlesFeed_Handler,
 		},
 		{
 			MethodName: "UpdateArticle",

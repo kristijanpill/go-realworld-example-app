@@ -3,6 +3,7 @@ syntax = "proto3";
 package profile;
 
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = ".;pb";
 
@@ -57,6 +58,10 @@ message ProfileIdResponse {
   string id = 1;
 }
 
+message FollowedIds {
+  repeated string ids = 1;
+}
+
 service ProfileService {
   rpc GetProfileByUsername(ProfileUsernameRequest) returns (ProfileResponse) {
     option (google.api.http) = {
@@ -78,4 +83,5 @@ service ProfileService {
   rpc CreateProfile(CreateProfileRequest) returns (ProfileInfo) {}
   rpc UpdateProfile(UpdateProfileRequest) returns (ProfileInfo) {}
   rpc GetProfileIdByUsername(ProfileIdUsernameRequest) returns (ProfileIdResponse) {}
+  rpc GetFollowedProfileIds(google.protobuf.Empty) returns (FollowedIds) {}
 }

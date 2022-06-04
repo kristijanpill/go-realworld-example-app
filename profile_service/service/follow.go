@@ -93,3 +93,21 @@ func (service *FollowService) UnfollowUserByUsername(ctx context.Context, reques
 		},
 	}, nil
 }
+
+func (service *FollowService)  GetFollowedProfileIds(ctx context.Context) (*pb.FollowedIds, error) {
+	currentUserIdString := ctx.Value(interceptor.CurrentUserKey{}).(string)
+
+	follows, err := service.followStore.FindAllByProfileId(currentUserIdString)
+	if err != nil {
+		return nil, err
+	}
+
+	var followedIds []string
+	for _, follow := range follows {
+		followedIds = append(followedIds, follow.TargetID.String())
+	}
+
+	return &pb.FollowedIds{
+		Ids: followedIds,
+	}, nil
+}

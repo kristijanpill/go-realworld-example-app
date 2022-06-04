@@ -118,11 +118,6 @@ message DeleteArticleFavoriteRequest {
 }
 
 service ArticleService {
-  rpc GetArticlesFeed(GetArticlesFeedRequest) returns (MultipleArticlesResponse) {
-    option (google.api.http) = {
-      get: "/api/articles/feed"
-    };
-  }
   rpc GetArticles(GetArticlesRequest) returns (MultipleArticlesResponse) {
     option (google.api.http) = {
       get: "/api/articles"
@@ -137,6 +132,11 @@ service ArticleService {
   rpc GetArticle(GetArticleRequest) returns (SingleArticleResponse) {
     option (google.api.http) = {
       get: "/api/articles/{slug}"
+    };
+  }
+  rpc GetArticlesFeed(GetArticlesFeedRequest) returns (MultipleArticlesResponse) {
+    option (google.api.http) = {
+      get: "/api/articles/feed"
     };
   }
   rpc UpdateArticle(UpdateArticleRequest) returns (SingleArticleResponse) {

@@ -31,6 +31,66 @@ func NewArticleService(articleStore store.ArticleStore, tagStore store.TagStore,
 	}
 }
 
+func (service *ArticleService) GetArticlesFeed(ctx context.Context, request *pb.GetArticlesFeedRequest) (*pb.MultipleArticlesResponse, error) {
+	currentUserIdString := ctx.Value(interceptor.CurrentUserKey{}).(string)
+	limit := request.Limit
+	if limit <= 0 {
+		limit = 20
+	}
+	offset := request.Offset
+	if offset < 0 {
+		offset = 0
+	}
+
+	followedIds, err := service.getFollowedProfileIds(ctx, currentUserIdString)
+	if err != nil {
+		return nil, err
+	}
+
+	articles, err := service.articleStore.FindByUserIds(offset, limit, followedIds.Ids)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &pb.MultipleArticlesResponse{
+		Articles: []*pb.Article{},
+		ArticlesCount: int32(len(articles)),
+	}
+
+	for _, articleModel := range articles {
+		author, err := service.getProfileById(ctx, articleModel.UserID.String())
+		if err != nil {
+			return nil, err
+		}
+
+		isFavorited := false
+		if ctx.Value(interceptor.CurrentUserKey{}) != nil {
+			isFavorited = service.isFavoritedByUserId(ctx.Value(interceptor.CurrentUserKey{}).(string), articleModel.ID.String())
+		}
+
+		article := &pb.Article{
+			Slug: articleModel.Slug,
+			Title: articleModel.Title,
+			Description: articleModel.Description,
+			Body: articleModel.Body,
+			TagList: service.getTagList(articleModel),
+			CreatedAt: articleModel.CreatedAt.Format("2006-01-02T15:04:05Z"),
+			UpdatedAt: articleModel.UpdatedAt.Format("2006-01-02T15:04:05Z"),
+			Favorited: isFavorited,
+			FavoritesCount: 0,
+			Author: &pb.Profile{
+				Username: author.Profile.Username,
+				Bio: author.Profile.Bio,
+				Image: author.Profile.Image,
+				Following: author.Profile.Following,
+			},
+		}
+		response.Articles = append(response.Articles, article)
+	}
+
+	return response, nil
+}
+
 func (service *ArticleService) GetArticles(ctx context.Context, request *pb.GetArticlesRequest) (*pb.MultipleArticlesResponse, error) {
 	limit := request.Limit
 	if limit <= 0 {
@@ -261,6 +321,15 @@ func (service *ArticleService) DeleteArticle(ctx context.Context, request *pb.De
 	}
 
 	return &emptypb.Empty{}, nil
+}
+
+func (service *ArticleService) getFollowedProfileIds(ctx context.Context, id string) (*pb.FollowedIds, error) {
+	if ctx.Value(interceptor.TokenKey{}) != nil {
+		md := metadata.New(map[string]string{"Authorization": "Token " + ctx.Value(interceptor.TokenKey{}).(string)})
+		ctx = metadata.NewOutgoingContext(ctx, md)
+	}
+
+	return service.profileServiceClient.GetFollowedProfileIds(ctx, &emptypb.Empty{})
 }
 
 func (service *ArticleService) getProfileById(ctx context.Context, id string) (*pb.ProfileResponse, error) {

@@ -25,7 +25,7 @@ func NewArticleHandler(articleService *service.ArticleService, tagService *servi
 	}
 }
 
-func (handler* ArticleHandler) GetArticles(ctx context.Context, request *pb.GetArticlesRequest) (*pb.MultipleArticlesResponse, error) {
+func (handler *ArticleHandler) GetArticles(ctx context.Context, request *pb.GetArticlesRequest) (*pb.MultipleArticlesResponse, error) {
 	return handler.articleService.GetArticles(ctx, request);
 }
 
@@ -35,6 +35,10 @@ func (handler *ArticleHandler) CreateArticle(ctx context.Context, request *pb.Ne
 
 func (handler *ArticleHandler) GetArticle(ctx context.Context, request *pb.GetArticleRequest) (*pb.SingleArticleResponse, error) {
 	return handler.articleService.GetArticle(ctx, request)
+}
+
+func (handler *ArticleHandler) GetArticlesFeed(ctx context.Context, request *pb.GetArticlesFeedRequest) (*pb.MultipleArticlesResponse, error) {
+	return handler.articleService.GetArticlesFeed(ctx, request)
 }
 
 func (handler *ArticleHandler) UpdateArticle(ctx context.Context, request *pb.UpdateArticleRequest) (*pb.SingleArticleResponse, error) {
