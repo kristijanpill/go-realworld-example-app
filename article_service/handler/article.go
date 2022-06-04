@@ -5,6 +5,7 @@ import (
 
 	"github.com/kristijanpill/go-realworld-example-app/article_service/service"
 	"github.com/kristijanpill/go-realworld-example-app/common/proto/pb"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type ArticleHandler struct {
@@ -36,6 +37,10 @@ func (handler *ArticleHandler) GetArticle(ctx context.Context, request *pb.GetAr
 
 func (handler *ArticleHandler) UpdateArticle(ctx context.Context, request *pb.UpdateArticleRequest) (*pb.SingleArticleResponse, error) {
 	return handler.articleService.UpdateArticle(ctx, request)
+}
+
+func (handler *ArticleHandler) DeleteArticle(ctx context.Context, request *pb.DeleteArticleRequest) (*emptypb.Empty, error) {
+	return handler.articleService.DeleteArticle(ctx, request)
 }
 
 func (handler *ArticleHandler) CreateArticleFavorite(ctx context.Context, request *pb.CreateArticleFavoriteRequest) (*pb.SingleArticleResponse, error) {

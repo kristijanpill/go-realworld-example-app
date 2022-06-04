@@ -72,3 +72,9 @@ func (store *ArticlePostgresStore) Update(article *model.Article) (*model.Articl
 	
 	return article, result.Error
 }
+
+func (store *ArticlePostgresStore) Delete(article *model.Article) error {
+	result := store.db.Select("Tags").Delete(article)
+
+	return result.Error
+}

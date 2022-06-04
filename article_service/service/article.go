@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"gorm.io/gorm"
 )
 
@@ -244,6 +245,24 @@ func (service *ArticleService) UpdateArticle(ctx context.Context, request *pb.Up
 	}, nil
 }
 
+func (service *ArticleService) DeleteArticle(ctx context.Context, request *pb.DeleteArticleRequest) (*emptypb.Empty, error) {
+	currentUserIdString := ctx.Value(interceptor.CurrentUserKey{}).(string)
+	article, err := service.findArticleBySlug(request.Slug)
+	if err != nil {
+		return nil, err
+	}
+	if article.UserID.String() != currentUserIdString {
+		return nil, status.Error(codes.Unauthenticated, "forbidden")
+	}
+
+	err = service.deleteArticle(article)
+	if err != nil {
+		return nil, err
+	}
+
+	return &emptypb.Empty{}, nil
+}
+
 func (service *ArticleService) getProfileById(ctx context.Context, id string) (*pb.ProfileResponse, error) {
 	if ctx.Value(interceptor.TokenKey{}) != nil {
 		md := metadata.New(map[string]string{"Authorization": "Token " + ctx.Value(interceptor.TokenKey{}).(string)})
@@ -285,6 +304,10 @@ func (service *ArticleService) isFavoritedByUserId(slug, userId string) bool {
 
 func (service *ArticleService) updateArticle(article *model.Article) (*model.Article, error) {
 	return service.articleStore.Update(article)
+}
+
+func (service *ArticleService) deleteArticle(article *model.Article) error {
+	return service.articleStore.Delete(article)
 }
 
 func (service *ArticleService) getTagList(article *model.Article) []string {
