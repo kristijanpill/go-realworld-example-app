@@ -7,7 +7,10 @@ import (
 	"github.com/kristijanpill/go-realworld-example-app/article_service/store"
 	"github.com/kristijanpill/go-realworld-example-app/common/interceptor"
 	"github.com/kristijanpill/go-realworld-example-app/common/proto/pb"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type CommentService struct {
@@ -60,6 +63,34 @@ func (service *CommentService) CreateArticleComment(ctx context.Context, request
 			},
 		},
 	}, nil
+}
+
+func (service *CommentService) DeleteArticleComment(ctx context.Context, request *pb.DeleteArticleCommentRequest) (*emptypb.Empty, error) {
+	currentUserIdString := ctx.Value(interceptor.CurrentUserKey{}).(string)
+	article, err := service.articleStore.FindBySlug(request.Slug)
+	if err != nil {
+		return nil, err
+	}
+
+	comment, err := service.commentStore.FindById(request.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	if comment.ArticleID.String() != article.ID.String() {
+		return nil, status.Error(codes.InvalidArgument, "comment does not belong to this article")
+	}
+
+	if comment.UserID.String() != currentUserIdString {
+		return nil, status.Error(codes.Unauthenticated, "forbidden")
+	}
+
+	err = service.commentStore.Delete(comment)
+	if err != nil {
+		return nil, err
+	}
+
+	return &emptypb.Empty{}, nil
 }
 
 func (service *CommentService) getProfileById(ctx context.Context, id string) (*pb.ProfileResponse, error) {

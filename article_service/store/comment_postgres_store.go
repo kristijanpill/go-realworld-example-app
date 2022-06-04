@@ -25,3 +25,15 @@ func (store *CommentPostgresStore) Create(comment *model.Comment) (*model.Commen
 
 	return comment, result.Error
 }
+
+func (store *CommentPostgresStore) FindById(id int32) (*model.Comment, error) {
+	var comment model.Comment
+	result := store.db.Where("id = ?", id).First(&comment)
+
+	return &comment, result.Error
+}
+func (store *CommentPostgresStore) Delete(comment *model.Comment) error {
+	result := store.db.Delete(comment)
+
+	return result.Error
+}

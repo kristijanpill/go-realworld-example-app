@@ -56,3 +56,7 @@ func (handler *ArticleHandler) DeleteArticleFavorite(ctx context.Context, reques
 func (handler *ArticleHandler) CreateArticleComment(ctx context.Context, request *pb.NewCommentRequest) (*pb.SingleCommentResponse, error) {
 	return handler.commentService.CreateArticleComment(ctx, request)
 }
+
+func (handler *ArticleHandler) DeleteArticleComment(ctx context.Context, request *pb.DeleteArticleCommentRequest) (*emptypb.Empty, error) {
+	return  handler.commentService.DeleteArticleComment(ctx, request)
+}
