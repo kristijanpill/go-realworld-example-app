@@ -1,5 +1,7 @@
 package config
 
+import "os"
+
 type Config struct {
 	Port                    string
 	ProfileServiceHost      string
@@ -15,22 +17,15 @@ type Config struct {
 
 func NewConfig() *Config {
 	return &Config{
-		// Port:                    os.Getenv("API_GATEWAY_PORT"),
-		// ProfileDatabaseHost:     os.Getenv("PROFILE_DATABASE_HOST"),
-		// ProfileDatabasePort:     os.Getenv("PROFILE_DATABASE_PORT"),
-		// ProfileDatabaseUser:     os.Getenv("PROFILE_DATABASE_USER"),
-		// ProfileDatabasePassword: os.Getenv("PROFILE_DATABASE_PASSWORD"),
-		// ProfileDatabaseName:     os.Getenv("PROFILE_DATABASE_NAME"),
-		// PublicKey:               os.Getenv("PUBLIC_KEY"),
-		Port:                    "8083",
-		ProfileServiceHost:      "localhost",
-		ProfileServicePort:      "8082",
-		PublicKey:               "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0AzWYJTc9jiPn+RMNjMJ\nhscn8hg/Mt0U22efM6IvM83CyQCiFHP1Z8rs2HFqRbid/hQxW23HrXQzKx5hGPdU\n14ncF8oN7utDQxdq6ivTsF1tMQtHWb2jnYmpKwTyelbMMGKLHj3yy2j59Y/X94EX\nPNtQtgAO9FF5gKzjkaBu6KzLU2RJC9bADVd5sotM/JP/Ce5D/97XV7i1KStTUDiV\nfDBWCkDylBTQTmI1rO9MdayVduuAzNdWXRfyqKcWI2i4pA1aaskiaViVsIhF3ksm\nYW4Bu0RxK5SP2byHj7pv93XsabA+QXZ37QRhYzBxx6nS0x/dNtAxIltIBZaeSTN0\ngQIDAQAB\n-----END PUBLIC KEY-----",
-		ArticleDatabaseHost:     "localhost",
-		ArticleDatabasePort:     "5432",
-		ArticleDatabaseUser:     "postgres",
-		ArticleDatabasePassword: "root",
-		ArticleDatabaseName:     "articles",
+		Port:                    os.Getenv("API_GATEWAY_PORT"),
+		ProfileServiceHost:      os.Getenv("PROFILE_SERVICE_HOST"),
+		PublicKey:               os.Getenv("PUBLIC_KEY"),
+		ProfileServicePort:      os.Getenv("PROFILE_SERVICE_PORT"),
+		ArticleDatabaseHost:     os.Getenv("PROFILE_DATABASE_HOST"),
+		ArticleDatabasePort:     os.Getenv("PROFILE_DATABASE_PORT"),
+		ArticleDatabaseUser:     os.Getenv("PROFILE_DATABASE_USER"),
+		ArticleDatabasePassword: os.Getenv("PROFILE_DATABASE_PASSWORD"),
+		ArticleDatabaseName:     os.Getenv("PROFILE_DATABASE_NAME"),
 		RestrictedPaths:         restrictedPaths(),
 	}
 }
@@ -42,6 +37,7 @@ func restrictedPaths() map[string]bool {
 		articleService + "GetArticles":           false,
 		articleService + "CreateArticle":         true,
 		articleService + "GetArticle":            false,
+		articleService + "GetArticlesFeed":       true,
 		articleService + "UpdateArticle":         true,
 		articleService + "DeleteArticle":         true,
 		articleService + "GetArticleComments":    false,
