@@ -30,6 +30,10 @@ func (handler *ArticleHandler) CreateArticle(ctx context.Context, request *pb.Ne
 	return handler.articleService.CreateArticle(ctx, request);
 }
 
+func (handler *ArticleHandler) GetArticle(ctx context.Context, request *pb.GetArticleRequest) (*pb.SingleArticleResponse, error) {
+	return handler.articleService.GetArticle(ctx, request)
+}
+
 func (handler *ArticleHandler) CreateArticleFavorite(ctx context.Context, request *pb.CreateArticleFavoriteRequest) (*pb.SingleArticleResponse, error) {
 	return handler.favoriteService.CreateArticleFavorite(ctx, request)
 }

@@ -64,11 +64,7 @@ func (service *ArticleService) GetArticles(ctx context.Context, request *pb.GetA
 	}
 
 	for _, articleModel := range articles {
-		var tagList []string
-		for _, tag := range articleModel.Tags {
-			tagList = append(tagList, tag.Name)
-		}
-
+		tagList := service.getTagList(articleModel)
 		author, err := service.getProfileById(ctx, articleModel.UserID.String())
 		if err != nil {
 			return nil, err
@@ -85,8 +81,8 @@ func (service *ArticleService) GetArticles(ctx context.Context, request *pb.GetA
 			Description: articleModel.Description,
 			Body: articleModel.Body,
 			TagList: tagList,
-			CreatedAt: articleModel.CreatedAt.UTC().String(),
-			UpdatedAt: articleModel.UpdatedAt.UTC().String(),
+			CreatedAt: articleModel.CreatedAt.Format("2006-01-02T15:04:05Z"),
+			UpdatedAt: articleModel.UpdatedAt.Format("2006-01-02T15:04:05Z"),
 			Favorited: isFavorited,
 			FavoritesCount: 0,
 			Author: &pb.Profile{
@@ -145,8 +141,8 @@ func (service *ArticleService) CreateArticle (ctx context.Context, request *pb.N
 			Description: article.Description,
 			Body: article.Body,
 			TagList: request.Article.TagList,
-			CreatedAt: article.CreatedAt.UTC().String(),
-			UpdatedAt: article.UpdatedAt.UTC().String(),
+			CreatedAt: article.CreatedAt.Format("2006-01-02T15:04:05Z"),
+			UpdatedAt: article.UpdatedAt.Format("2006-01-02T15:04:05Z"),
 			Favorited: false,
 			FavoritesCount: 0,
 			Author: &pb.Profile{
@@ -154,6 +150,44 @@ func (service *ArticleService) CreateArticle (ctx context.Context, request *pb.N
 				Bio: profile.Profile.Bio,
 				Image: profile.Profile.Image,
 				Following: profile.Profile.Following,
+			},
+		},
+	}, nil
+}
+
+func (service *ArticleService) GetArticle(ctx context.Context, request *pb.GetArticleRequest) (*pb.SingleArticleResponse, error) {
+	article, err := service.findArticleBySlug(request.Slug)
+	if err != nil {
+		return nil, err
+	}
+
+	tagList := service.getTagList(article)
+	author, err := service.getProfileById(ctx, article.UserID.String())
+	if err != nil {
+		return nil, err
+	}
+
+	isFavorited := false
+	if ctx.Value(interceptor.CurrentUserKey{}) != nil {
+		isFavorited = service.isFavoritedByUserId(ctx.Value(interceptor.CurrentUserKey{}).(string), article.Slug)
+	}
+
+	return &pb.SingleArticleResponse{
+		Article: &pb.Article{
+			Slug: article.Slug,
+			Title: article.Title,
+			Description: article.Description,
+			Body: article.Body,
+			TagList: tagList,
+			CreatedAt: article.CreatedAt.Format("2006-01-02T15:04:05Z"),
+			UpdatedAt: article.UpdatedAt.Format("2006-01-02T15:04:05Z"),
+			Favorited: isFavorited,
+			FavoritesCount: 0,
+			Author: &pb.Profile{
+				Username: author.Profile.Username,
+				Bio: author.Profile.Bio,
+				Image: author.Profile.Image,
+				Following: author.Profile.Following,
 			},
 		},
 	}, nil
@@ -190,6 +224,19 @@ func (service *ArticleService) findArticles(offset, limit int32) ([]*model.Artic
 	return service.articleStore.Find(offset, limit)
 }
 
+func (service *ArticleService) findArticleBySlug(slug string) (*model.Article, error) {
+	return service.articleStore.FindBySlug(slug)
+}
+
 func (service *ArticleService) isFavoritedByUserId(slug, userId string) bool {
 	return service.favoriteStore.IsArticleFavoritedByUserId(slug, userId)
+}
+
+func (service *ArticleService) getTagList(article *model.Article) []string {
+	var tagList []string
+	for _, tag := range article.Tags {
+		tagList = append(tagList, tag.Name)
+	}
+
+	return tagList
 }
